@@ -1,9 +1,13 @@
 @import 'tailwindcss';
-@import "tw-animate-css";
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-inter: 'Inter', sans-serif;
+  --font-sora: 'Sora', sans-serif;
+  --font-batak: 'Noto Sans Batak', sans-serif;
+  --font-bawor: 'Bawor', sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -43,71 +47,77 @@
 
 :root {
   --radius: 0.625rem;
-  --background: #FAFAFA; /* Light background */
-  --foreground: #333333; /* Dark text */
-  --card: #FFFFFF; /* White card */
-  --card-foreground: #333333; /* Dark text on card */
-  --popover: #FFFFFF; /* White popover */
-  --popover-foreground: #333333; /* Dark text on popover */
-  --primary: #8AFF33; /* Duolingo Green */
-  --primary-foreground: #FAFAFA; /* White text on primary */
-  --secondary: #9933FF; /* Duolingo Purple */
-  --secondary-foreground: #FAFAFA; /* White text on secondary */
-  --muted: #E6E6E6; /* Light grey muted */
+  --background: #fff; /* Light background */
+  --foreground: #222222; /* Dark text */
+  --card: #fff; /* White card */
+  --card-foreground: #222222; /* Dark text on card */
+  --popover: #fff; /* White popover */
+  --popover-foreground: #222222; /* Dark text on popover */
+  --primary: #d8a56e; /* Duolingo Green */
+  --primary-foreground: #222222; /* White text on primary */
+  --secondary: #aaaaaa; /* Duolingo Purple */
+  --secondary-foreground: #fff; /* White text on secondary */
+  --muted: #e6e6e6; /* Light grey muted */
   --muted-foreground: #808080; /* Medium grey muted text */
-  --accent: #3399FF; /* Duolingo Blue */
-  --accent-foreground: #333333; /* Dark text on accent */
-  --destructive: #CC3333; /* Red for destructive actions */
-  --border: #E6E6E6; /* Light grey border */
-  --input: #E6E6E6; /* Light grey input border */
-  --ring: #8AFF33; /* Duolingo Green for focus ring */
-  --chart-1: #8AFF33; /* Duolingo Green */
-  --chart-2: #9933FF; /* Duolingo Purple */
-  --chart-3: #3399FF; /* Duolingo Blue */
-  --chart-4: #FFCC33; /* Duolingo Yellow */
-  --chart-5: #FF8000; /* Duolingo Orange */
-  --sidebar: #FAFAFA; /* Light sidebar */
+  --accent: #696969; /* Duolingo Blue */
+  --accent-foreground: #fff; /* Dark text on accent */
+  --destructive: #cc3333; /* Red for destructive actions */
+  --border: #ffddb8; /* Light grey border */
+  --input: #e6e6e6; /* Light grey input border */
+  --ring: #ecbb88; /* Duolingo Green for focus ring */
+  --chart-1: #ecbb88; /* Darker Duolingo Green */
+  --chart-2: #9c9c9c; /* Darker Duolingo Purple */
+  --chart-3: #0066cc; /* Darker Duolingo Blue */
+  --chart-4: #cc9900; /* Darker Duolingo Yellow */
+  --chart-5: #cc6600; /* Darker Duolingo Orange */
+  --sidebar: #333333; /* Darker sidebar */
   --sidebar-foreground: #333333; /* Dark text on sidebar */
-  --sidebar-primary: #8AFF33; /* Duolingo Green */
-  --sidebar-primary-foreground: #FAFAFA; /* White text on sidebar primary */
-  --sidebar-accent: #3399FF; /* Duolingo Blue */
+  --sidebar-primary: #ecbb88; /* Duolingo Green */
+  --sidebar-primary-foreground: #fff; /* White text on sidebar primary */
+  --sidebar-accent: #696969; /* Duolingo Blue */
   --sidebar-accent-foreground: #333333; /* Dark text on sidebar accent */
-  --sidebar-border: #E6E6E6; /* Light grey sidebar border */
-  --sidebar-ring: #8AFF33; /* Duolingo Green for sidebar focus ring */
+  --sidebar-border: #ffa84a; /* Light grey sidebar border */
+  --sidebar-ring: #ecbb88; /* Duolingo Green for sidebar focus ring */
 }
 
 .dark {
-  --background: #262626; /* Dark background */
-  --foreground: #E6E6E6; /* Light text */
-  --card: #333333; /* Darker card */
-  --card-foreground: #E6E6E6; /* Light text on card */
-  --popover: #333333; /* Darker popover */
-  --popover-foreground: #E6E6E6; /* Light text on popover */
-  --primary: #66CC00; /* Darker Duolingo Green */
-  --primary-foreground: #262626; /* Dark text on primary */
-  --secondary: #6600CC; /* Darker Duolingo Purple */
-  --secondary-foreground: #E6E6E6; /* Light text on secondary */
+  --background: #222222; /* Dark background */
+  --foreground: #fff; /* Light text */
+  --card: #323232; /* Darker card */
+  --card-foreground: #fff; /* Light text on card */
+  --popover: #323232; /* Darker popover */
+  --popover-foreground: #fff; /* Light text on popover */
+  --primary: #ecbb88; /* Darker Duolingo Green */
+  --primary-foreground: #222222; /* Dark text on primary */
+  --secondary: #9c9c9c; /* Darker Duolingo Purple */
+  --secondary-foreground: #222222; /* Light text on secondary */
   --muted: #404040; /* Darker grey muted */
   --muted-foreground: #999999; /* Medium light grey muted text */
-  --accent: #0066CC; /* Darker Duolingo Blue */
-  --accent-foreground: #E6E6E6; /* Light text on accent */
-  --destructive: #FF6666; /* Darker red for destructive actions */
-  --border: #404040; /* Darker grey border */
+  --accent: #696969; /* Darker Duolingo Blue */
+  --accent-foreground: #fff; /* Light text on accent */
+  --destructive: #ff6666; /* Darker red for destructive actions */
+  --border: #635039; /* Darker grey border */
   --input: #404040; /* Darker grey input border */
-  --ring: #66CC00; /* Darker Duolingo Green for focus ring */
-  --chart-1: #66CC00; /* Darker Duolingo Green */
-  --chart-2: #6600CC; /* Darker Duolingo Purple */
-  --chart-3: #0066CC; /* Darker Duolingo Blue */
-  --chart-4: #CC9900; /* Darker Duolingo Yellow */
-  --chart-5: #CC6600; /* Darker Duolingo Orange */
+  --ring: #ecbb88; /* Darker Duolingo Green for focus ring */
+  --chart-1: #ecbb88; /* Darker Duolingo Green */
+  --chart-2: #9c9c9c; /* Darker Duolingo Purple */
+  --chart-3: #0066cc; /* Darker Duolingo Blue */
+  --chart-4: #cc9900; /* Darker Duolingo Yellow */
+  --chart-5: #cc6600; /* Darker Duolingo Orange */
   --sidebar: #333333; /* Darker sidebar */
-  --sidebar-foreground: #E6E6E6; /* Light text on sidebar */
-  --sidebar-primary: #66CC00; /* Darker Duolingo Green */
-  --sidebar-primary-foreground: #262626; /* Dark text on sidebar primary */
-  --sidebar-accent: #0066CC; /* Darker Duolingo Blue */
-  --sidebar-accent-foreground: #E6E6E6; /* Light text on sidebar accent */
+  --sidebar-foreground: #fff; /* Light text on sidebar */
+  --sidebar-primary: #ecbb88; /* Darker Duolingo Green */
+  --sidebar-primary-foreground: #222222; /* Dark text on sidebar primary */
+  --sidebar-accent: #696969; /* Darker Duolingo Blue */
+  --sidebar-accent-foreground: #fff; /* Light text on sidebar accent */
   --sidebar-border: #404040; /* Darker grey sidebar border */
-  --sidebar-ring: #66CC00; /* Darker Duolingo Green for sidebar focus ring */
+  --sidebar-ring: #ecbb88; /* Darker Duolingo Green for sidebar focus ring */
+}
+
+@layer components {
+  button {
+    @apply font-sora font-bold;
+  }
 }
 
 @layer base {
@@ -115,6 +125,12 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
   }
+}
+
+@font-face {
+  font-family: 'Bawor';
+  src: url('/assets/font/Bawor.ttf') format('truetype');
+  font-size: small;
 }
