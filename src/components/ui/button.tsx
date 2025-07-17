@@ -1,12 +1,10 @@
-/* eslint-disable react-refresh/only-export-components */
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
-// -- VARIAN UNTUK CONTAINER (EFEK 3D) --
-// Ini adalah bagian 'bawah' atau 'bayangan' dari tombol 3D kita.
+// Tidak ada perubahan di sini
 const buttonContainerVariants = cva(
   'rounded-lg transition-all duration-150 ease-in-out disabled:pointer-events-none disabled:opacity-50',
   {
@@ -18,7 +16,7 @@ const buttonContainerVariants = cva(
           'bg-destructive/70 active:bg-destructive/60 pb-[4px] active:pb-0 active:translate-y-[4px] cursor-pointer',
         secondary:
           'bg-secondary/70 active:bg-secondary/60 pb-[4px] active:pb-0 active:translate-y-[4px] cursor-pointer',
-        link: '', // Tidak ada efek 3D untuk varian link
+        link: '',
       },
     },
     defaultVariants: {
@@ -27,8 +25,7 @@ const buttonContainerVariants = cva(
   }
 );
 
-// -- VARIAN UNTUK TOMBOL UTAMA (BAGIAN ATAS) --
-// Ini adalah bagian yang terlihat dan berisi teks/ikon.
+// Tidak ada perubahan di sini
 const buttonFaceVariants = cva(
   'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 w-full',
   {
@@ -66,10 +63,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
 
-    // Untuk varian 'link', kita tidak perlu struktur 3D
     if (variant === 'link') {
       return (
         <Comp
+          // Untuk 'link', className tetap di sini karena tidak ada container
           className={cn(buttonFaceVariants({ variant, size, className }))}
           ref={ref}
           {...props}
@@ -77,16 +74,19 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       );
     }
 
-    // Untuk varian lain, kita gunakan struktur 3D
+    // --- PERUBAHAN UTAMA ADA DI SINI ---
     return (
       <button
+        // 1. `className` dari props sekarang diterapkan di sini, di container luar.
+        // Ini memastikan `mt-6` atau class layout lainnya menggerakkan seluruh tombol.
         className={cn(buttonContainerVariants({ variant }), className)}
         disabled={props.disabled}
         ref={ref}
       >
         <Comp
+          // 2. `className` dari props dihapus dari sini.
+          // Ukuran dan padding wajah tombol sekarang MURNI dikontrol oleh props `variant` dan `size`.
           className={cn(buttonFaceVariants({ variant, size }))}
-          // Props asli (seperti onClick) harus ada di elemen 'Comp'
           {...props}
         />
       </button>

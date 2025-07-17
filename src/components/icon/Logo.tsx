@@ -1,5 +1,5 @@
 import React from 'react';
-import LogoSVG from '/assets/logo/podahorassvg.svg';
+import LogoSVG from '/assets/logo/podahorasOriginal.svg';
 
 function Logo() {
   return <LogoSVG />;
