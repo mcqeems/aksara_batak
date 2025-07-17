@@ -111,7 +111,7 @@
   --sidebar-accent: #696969; /* Darker Duolingo Blue */
   --sidebar-accent-foreground: #fff; /* Light text on sidebar accent */
   --sidebar-border: #404040; /* Darker grey sidebar border */
-  --sidebar-ring: #ecbb88;
+  --sidebar-ring: #ecbb88; /* Darker Duolingo Green for sidebar focus ring */
 }
 
 @layer components {
