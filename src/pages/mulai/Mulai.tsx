@@ -224,7 +224,9 @@ function Mulai() {
           <Card className="px-5 py-5">
             <CardHeader>
               {' '}
-              <h2 className="text-center text-2xl font-bold">Kuis Selesai!</h2>
+              <h2 className="mb-5 text-center text-2xl font-bold">
+                Kuis Selesai!
+              </h2>
               {score > 50 ? (
                 <EmojiHunggingFace />
               ) : score === 50 ? (
@@ -245,7 +247,7 @@ function Mulai() {
                   {score}
                 </h1>
               ) : score === 50 ? (
-                <h1 className="text-primary-foreground text-center text-7xl font-bold">
+                <h1 className="text-muted-foreground text-center text-7xl font-bold">
                   {score}
                 </h1>
               ) : (
