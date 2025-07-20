@@ -17,6 +17,7 @@ import Learn from './pages/dashboard/learn/Learn';
 import Toba from './pages/dashboard/learn/toba/Toba';
 import AksaraLearn from './pages/dashboard/learn/aksara/AksaraLearn';
 import { Contact } from 'lucide-react';
+import ProtectedRoute from './components/layout/ProtectedRoutes';
 
 function App() {
   return (
@@ -33,12 +34,14 @@ function App() {
       <Route path="/pengenalan/sejarah" element={<Sejarah />} />
 
       {/* Dashboard */}
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/chat" element={<Chat />} />
-      <Route path="/leaderboard" element={<Leaderboard />} />
-      <Route path="/learn" element={<Learn />} />
-      <Route path="/learn/aksara" element={<AksaraLearn />} />
-      <Route path="/learn/toba" element={<Toba />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/learn" element={<Learn />} />
+        <Route path="/learn/aksara" element={<AksaraLearn />} />
+        <Route path="/learn/toba" element={<Toba />} />
+      </Route>
 
       {/* Not Found */}
       <Route path="*" element={<NotFound />} />

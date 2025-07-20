@@ -134,3 +134,12 @@
   src: url('/assets/font/Bawor.ttf') format('truetype');
   font-size: small;
 }
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

@@ -17,6 +17,12 @@ const buttonContainerVariants = cva(
         secondary:
           'bg-secondary/70 active:bg-secondary/60 pb-[4px] active:pb-0 active:translate-y-[4px] cursor-pointer',
         link: '',
+        'circle-default':
+          'rounded-full bg-primary/70 active:bg-primary/60 pb-[4px] active:pb-0 active:translate-y-[4px] cursor-pointer',
+        'circle-destructive':
+          'rounded-full bg-destructive/70 active:bg-destructive/60 pb-[4px] active:pb-0 active:translate-y-[4px] cursor-pointer',
+        'circle-secondary':
+          'rounded-full bg-secondary/70 active:bg-secondary/60 pb-[4px] active:pb-0 active:translate-y-[4px] cursor-pointer',
       },
     },
     defaultVariants: {
@@ -38,6 +44,12 @@ const buttonFaceVariants = cva(
         secondary:
           'bg-secondary text-primary-foreground hover:bg-secondary/80 cursor-pointer',
         link: 'bg-transparent underline-offset-4 hover:underline text-primary cursor-pointer',
+        'circle-default':
+          'rounded-full bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer',
+        'circle-destructive':
+          'rounded-full bg-destructive text-primary-foreground hover:bg-destructive/90 cursor-pointer',
+        'circle-secondary':
+          'rounded-full bg-secondary text-primary-foreground hover:bg-secondary/80 cursor-pointer',
       },
       size: {
         default: 'h-10 px-4 py-2',

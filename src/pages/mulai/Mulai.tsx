@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Link } from 'react-router-dom'; // <-- Impor Link
+import { Link, Navigate } from 'react-router-dom'; // <-- Impor Link
 import { Navbar } from '@/components/layout/navbar';
 import WritingCanvas, {
   type CanvasHandle,
@@ -7,7 +7,7 @@ import WritingCanvas, {
 import resemble from 'resemblejs';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { ArrowBigRightDash } from 'lucide-react';
+import { ArrowBigRightDash, Volume2 } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -22,6 +22,8 @@ import Success from '@/components/icon/Success';
 import EmojiHunggingFace from '@/components/icon/EmojiHunggingFace';
 import EmojiSad from '@/components/icon/EmojiSad';
 import EmojiGrimacing from '@/components/icon/EmojiGrimacing';
+import useSound from 'use-sound';
+import { useAuth } from '@/hooks/useAuth';
 
 // --- DATA KUIS (TIDAK ADA PERUBAHAN) ---
 const quizData = [
@@ -31,6 +33,7 @@ const quizData = [
     type: 'multiple-choice',
     questionText: 'Aksara Batak ini dibaca...',
     image: '/assets/hurufaksara/vokal/a.png',
+    audio: '/assets/audio/a.mp3',
     options: ['i', 'a', 'o', 'u'],
     correctAnswer: 'a',
   },
@@ -39,6 +42,7 @@ const quizData = [
     type: 'multiple-choice',
     questionText: 'Aksara Batak ini dibaca...',
     image: '/assets/hurufaksara/vokal/i.png',
+    audio: '/assets/audio/i.mp3',
     options: ['e', 'u', 'i', 'a'],
     correctAnswer: 'i',
   },
@@ -47,6 +51,7 @@ const quizData = [
     type: 'multiple-choice',
     questionText: 'Aksara Batak ini dibaca...',
     image: '/assets/hurufaksara/vokal/u.png',
+    audio: '/assets/audio/u.mp3',
     options: ['o', 'u', 'a', 'i'],
     correctAnswer: 'u',
   },
@@ -55,6 +60,7 @@ const quizData = [
     type: 'multiple-choice',
     questionText: 'Aksara Batak ini dibaca...',
     image: '/assets/hurufaksara/vokal/e.png',
+    audio: '/assets/audio/e.mp3',
     options: ['e', 'i', 'a', 'u'],
     correctAnswer: 'e',
   },
@@ -63,6 +69,7 @@ const quizData = [
     type: 'multiple-choice',
     questionText: 'Aksara Batak ini dibaca...',
     image: '/assets/hurufaksara/vokal/o.png',
+    audio: '/assets/audio/o.mp3',
     options: ['a', 'o', 'i', 'u'],
     correctAnswer: 'o',
   },
@@ -106,7 +113,6 @@ const quizData = [
 function Mulai() {
   // --- STATE BARU UNTUK KONTROL TAMPILAN ---
   const [quizStarted, setQuizStarted] = useState(false);
-
   const canvasRef = useRef<CanvasHandle>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [results, setResults] = useState<boolean[]>([]);
@@ -114,7 +120,6 @@ function Mulai() {
   const [quizFinished, setQuizFinished] = useState(false);
   const [feedback, setFeedback] = useState<React.ReactNode>('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
   const currentQuestion = quizData[currentQuestionIndex];
 
   // --- LOGIKA FUNGSI (TIDAK ADA PERUBAHAN) ---
@@ -174,9 +179,15 @@ function Mulai() {
     }
   };
 
+  const [playAudio] = useSound(currentQuestion.audio ?? '');
+
   const progressPercentage = (results.length / quizData.length) * 100;
 
-  // --- KONDISI 1: TAMPILAN AWAL SEBELUM KUIS DIMULAI ---
+  if (useAuth()) {
+    return <Navigate to="/dashboard" />;
+  }
+
+  // --- KONDISI 2: TAMPILAN AWAL SEBELUM KUIS DIMULAI ---
   if (!quizStarted) {
     return (
       <div>
@@ -212,7 +223,7 @@ function Mulai() {
     );
   }
 
-  // --- KONDISI 2: TAMPILAN KUIS TELAH SELESAI ---
+  // --- KONDISI 3: TAMPILAN KUIS TELAH SELESAI ---
   if (quizFinished) {
     const correctAnswers = results.filter(Boolean).length;
     const score = Math.round((correctAnswers / quizData.length) * 100);
@@ -274,7 +285,7 @@ function Mulai() {
     );
   }
 
-  // --- KONDISI 3: TAMPILAN KUIS SEDANG BERJALAN ---
+  // --- KONDISI 4: TAMPILAN KUIS SEDANG BERJALAN ---
   return (
     <div>
       <Navbar />
@@ -309,6 +320,13 @@ function Mulai() {
                     className="h-48 w-48 rounded-md md:h-64 md:w-64"
                   />{' '}
                 </CardContent>{' '}
+                <Button
+                  className="mr-7 w-full max-w-[75px] self-end"
+                  onClick={() => playAudio()}
+                  variant={'circle-default'}
+                >
+                  <Volume2 />
+                </Button>
               </Card>{' '}
               <div className="mt-6 grid w-full max-w-2xl grid-cols-2 gap-4 md:grid-cols-4">
                 {' '}
