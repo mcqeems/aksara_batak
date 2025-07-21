@@ -43,7 +43,7 @@ const buttonFaceVariants = cva(
           'bg-destructive text-primary-foreground hover:bg-destructive/90 cursor-pointer',
         secondary:
           'bg-secondary text-primary-foreground hover:bg-secondary/80 cursor-pointer',
-        link: 'bg-transparent underline-offset-4 hover:underline text-primary cursor-pointer',
+        link: 'bg-transparent underline-offset-4 hover:underline text-primary cursor-pointer hover:scale-125 hover:rotate-12 transition-all ease-in-out hover:text-primary/75',
         'circle-default':
           'rounded-full bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer',
         'circle-destructive':

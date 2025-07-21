@@ -1,11 +1,13 @@
-import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react';
+import { Bot, Home, Settings, WholeWord } from 'lucide-react';
+
+import LeaderboardIcon from '/assets/icons/ranking-stroke-rounded.svg';
 
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -14,28 +16,28 @@ import {
 // Menu items.
 const items = [
   {
-    title: 'Home',
-    url: '#',
+    title: 'Dashboard',
+    url: '/dashboard',
     icon: Home,
   },
   {
-    title: 'Inbox',
-    url: '#',
-    icon: Inbox,
+    title: 'Huruf Aksara',
+    url: '/aksara',
+    icon: WholeWord,
   },
   {
-    title: 'Calendar',
-    url: '#',
-    icon: Calendar,
+    title: 'AI Chatbot',
+    url: '/chat',
+    icon: Bot,
   },
   {
-    title: 'Search',
-    url: '#',
-    icon: Search,
+    title: 'Leaderboard',
+    url: '/leaderboard',
+    icon: LeaderboardIcon,
   },
   {
-    title: 'Settings',
-    url: '#',
+    title: 'Pengaturan',
+    url: '',
     icon: Settings,
   },
 ];
@@ -43,9 +45,11 @@ const items = [
 export default function AppSidebar() {
   return (
     <Sidebar>
+      <SidebarHeader className="font-bawor text-primary items-center text-5xl">
+        PodaHoras
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
