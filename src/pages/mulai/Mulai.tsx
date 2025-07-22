@@ -122,6 +122,8 @@ function Mulai() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const currentQuestion = quizData[currentQuestionIndex];
 
+  const { isAuthenticated } = useAuth();
+
   // --- LOGIKA FUNGSI (TIDAK ADA PERUBAHAN) ---
   const processAnswer = (isCorrect: boolean) => {
     setFeedback(
@@ -183,7 +185,7 @@ function Mulai() {
 
   const progressPercentage = (results.length / quizData.length) * 100;
 
-  if (useAuth()) {
+  if (isAuthenticated) {
     return <Navigate to="/dashboard" />;
   }
 
@@ -320,13 +322,16 @@ function Mulai() {
                     className="h-48 w-48 rounded-md md:h-64 md:w-64"
                   />{' '}
                 </CardContent>{' '}
-                <Button
-                  className="mr-7 w-full max-w-[75px] self-end"
-                  onClick={() => playAudio()}
-                  variant={'circle-default'}
-                >
-                  <Volume2 />
-                </Button>
+                <div className="mr-3 flex justify-end px-3">
+                  <Button
+                    onClick={() => playAudio()}
+                    variant={'circle-default'}
+                    size={'icon'}
+                    className="size-12" // Menentukan ukuran container tombol
+                  >
+                    <Volume2 />
+                  </Button>
+                </div>
               </Card>{' '}
               <div className="mt-6 grid w-full max-w-2xl grid-cols-2 gap-4 md:grid-cols-4">
                 {' '}
@@ -376,14 +381,15 @@ function Mulai() {
                   </div>{' '}
                 </CardContent>{' '}
               </Card>{' '}
-              <Button
-                onClick={handleCheckWritingAnswer}
-                disabled={isAnswered}
-                className="mt-6"
-              >
-                {' '}
-                Submit{' '}
-              </Button>{' '}
+              <div className="mt-5">
+                <Button
+                  onClick={handleCheckWritingAnswer}
+                  disabled={isAnswered}
+                >
+                  {' '}
+                  Submit{' '}
+                </Button>{' '}
+              </div>
             </div>
           )}
         </div>

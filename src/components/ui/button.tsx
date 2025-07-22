@@ -43,7 +43,7 @@ const buttonFaceVariants = cva(
           'bg-destructive text-primary-foreground hover:bg-destructive/90 cursor-pointer',
         secondary:
           'bg-secondary text-primary-foreground hover:bg-secondary/80 cursor-pointer',
-        link: 'bg-transparent underline-offset-4 hover:underline text-primary cursor-pointer hover:scale-125 hover:rotate-12 transition-all ease-in-out hover:text-primary/75',
+        link: 'bg-transparent underline-offset-4 hover:underline text-primary cursor-pointer  transition-all ease-in-out hover:text-primary/75',
         'circle-default':
           'rounded-full bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer',
         'circle-destructive':
@@ -78,7 +78,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     if (variant === 'link') {
       return (
         <Comp
-          // Untuk 'link', className tetap di sini karena tidak ada container
           className={cn(buttonFaceVariants({ variant, size, className }))}
           ref={ref}
           {...props}
@@ -86,19 +85,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       );
     }
 
-    // --- PERUBAHAN UTAMA ADA DI SINI ---
     return (
       <button
-        // 1. `className` dari props sekarang diterapkan di sini, di container luar.
-        // Ini memastikan `mt-6` atau class layout lainnya menggerakkan seluruh tombol.
-        className={cn(buttonContainerVariants({ variant }), className)}
+        // Wadah luar sekarang HANYA mengurus varian 3D-nya.
+        className={cn(buttonContainerVariants({ variant }))}
         disabled={props.disabled}
         ref={ref}
       >
         <Comp
-          // 2. `className` dari props dihapus dari sini.
-          // Ukuran dan padding wajah tombol sekarang MURNI dikontrol oleh props `variant` dan `size`.
-          className={cn(buttonFaceVariants({ variant, size }))}
+          // Wajah tombol sekarang menerima semua styling: varian, ukuran, DAN className dari luar.
+          // Ini memastikan 'h-28' dan 'flex-col' Anda diterapkan di sini.
+          className={cn(buttonFaceVariants({ variant, size }), className)}
           {...props}
         />
       </button>

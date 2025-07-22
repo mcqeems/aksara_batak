@@ -71,12 +71,13 @@
   --chart-4: #cc9900; /* Darker Duolingo Yellow */
   --chart-5: #cc6600; /* Darker Duolingo Orange */
   --sidebar: #333333; /* Darker sidebar */
-  --sidebar-foreground: #333333; /* Dark text on sidebar */
+  --sidebar: #fafafa; /* Light sidebar background */
+  --sidebar-foreground: #3f3f46; /* Dark text on sidebar */
   --sidebar-primary: #ecbb88; /* Duolingo Green */
   --sidebar-primary-foreground: #fff; /* White text on sidebar primary */
-  --sidebar-accent: #696969; /* Duolingo Blue */
-  --sidebar-accent-foreground: #333333; /* Dark text on sidebar accent */
-  --sidebar-border: #ffa84a; /* Light grey sidebar border */
+  --sidebar-accent: #e4e4e7; /* Light accent for hover */
+  --sidebar-accent-foreground: #09090b; /* Dark text on hover */
+  --sidebar-border: #e4e4e7; /* Light grey sidebar border */
   --sidebar-ring: #ecbb88; /* Duolingo Green for sidebar focus ring */
 }
 

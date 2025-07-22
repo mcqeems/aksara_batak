@@ -6,6 +6,7 @@ import Login from './pages/login/Login';
 import Homepage from './pages/homepage/Homepage';
 import Dashboard from './pages/dashboard/Dashboard';
 import About from './pages/about/About';
+import Contact from './pages/contact/Contact';
 import NotFound from './pages/notfound/NotFound';
 import Mulai from './pages/mulai/Mulai';
 import Pengenalan from './pages/pengenalan/Pengenalan';
@@ -16,8 +17,8 @@ import Leaderboard from './pages/dashboard/leaderboard/Leaderboard';
 import Learn from './pages/dashboard/learn/Learn';
 import Toba from './pages/dashboard/learn/toba/Toba';
 import AksaraLearn from './pages/dashboard/learn/aksara/AksaraLearn';
-import { Contact } from 'lucide-react';
 import ProtectedRoute from './components/layout/ProtectedRoutes';
+import Aksara from './pages/dashboard/aksara/Aksara';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/aksara" element={<Aksara />} />
         <Route path="/learn" element={<Learn />} />
         <Route path="/learn/aksara" element={<AksaraLearn />} />
         <Route path="/learn/toba" element={<Toba />} />

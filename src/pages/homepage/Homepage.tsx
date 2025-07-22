@@ -3,9 +3,10 @@ import React from 'react';
 
 function Homepage() {
   return (
-    <div>
-      <Navbar></Navbar>
-    </div>
+    <>
+      <Navbar />
+      <div></div>
+    </>
   );
 }
 
