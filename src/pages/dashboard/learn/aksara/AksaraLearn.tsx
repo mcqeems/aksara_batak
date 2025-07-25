@@ -1,65 +1,585 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { useState } from 'react';
-import { Check } from 'lucide-react';
-import { Link } from 'react-router-dom';
+// AksaraLearn.tsx (Dengan Paginasi & Auto-Scroll)
 
-// In a real application, this would likely come from an API
-// and have a more defined structure.
-interface LearnLevel {
+import { useState, useEffect, useRef } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogAction,
+} from '@/components/ui/alert-dialog';
+import {
+  Check,
+  Lock,
+  Volume2,
+  ArrowBigRightDash,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
+import useSound from 'use-sound';
+import resemble from 'resemblejs';
+
+// Komponen & utilitas
+import api from '@/services/api';
+import WritingCanvas, {
+  type CanvasHandle,
+} from '@/components/utils/WritingCanvas';
+import Success from '@/components/icon/Success';
+import Fail from '@/components/icon/Fail';
+import EmojiHunggingFace from '@/components/icon/EmojiHunggingFace';
+import EmojiSad from '@/components/icon/EmojiSad';
+import EmojiGrimacing from '@/components/icon/EmojiGrimacing';
+import Loader from '@/components/ui/loader';
+
+// --- DEFINISI TIPE ---
+
+interface QuizLevel {
   id: number;
   title: string;
-  path: string;
-  isCompleted: boolean;
+  level: number;
+  is_completed?: boolean;
 }
 
-const mockLevels: LearnLevel[] = [
-  {
-    id: 1,
-    title: 'Belajar Huruf Vokal Aksara Batak',
-    path: '/learn/aksara/vokal',
-    isCompleted: false,
-  },
-  {
-    id: 2,
-    title: 'Belajar Huruf Konsonan Aksara Batak',
-    path: '/learn/aksara/konsonan',
-    isCompleted: false,
-  },
-];
+interface QuizOption {
+  id: number;
+  option_text: string;
+  aksara_text: string;
+}
+
+interface QuizQuestion {
+  session_id: string;
+  question_id: number;
+  total_questions: number;
+  current_question_index: number;
+  question_type:
+    | 'pilihan_ganda_aksara'
+    | 'pilihan_ganda_batak'
+    | 'nulis_aksara';
+  question_text: string;
+  image_url: string;
+  audio_url: string;
+  options: QuizOption[];
+}
+
+interface SubmitResponseData {
+  is_correct: boolean;
+  correct_option_id: number;
+  quiz_finished: boolean;
+  next_question: QuizQuestion | null;
+  final_result?: {
+    final_score: number;
+    xp_earned: number;
+  };
+}
+
+interface UserProfile {
+  name: string;
+  total_xp: number;
+}
+
+interface ApiResponse<T> {
+  data: T;
+}
+
+// --- KOMPONEN UTAMA ---
 
 function AksaraLearn() {
-  // The state can be initialized with mock data or fetched from an API.
-  const [levels] = useState<LearnLevel[]>(mockLevels);
+  const [view, setView] = useState<
+    'loading' | 'level_selection' | 'in_quiz' | 'results'
+  >('loading');
+  const [levels, setLevels] = useState<QuizLevel[]>([]);
+  const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion | null>(
+    null
+  );
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [isAnswered, setIsAnswered] = useState(false);
+  const [feedback, setFeedback] = useState({ isCorrect: false, isOpen: false });
+  const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
+  const [totalQuizQuestions, setTotalQuizQuestions] = useState(0);
+  const [xpEarned, setXpEarned] = useState(0);
+  const [nextQuestionData, setNextQuestionData] = useState<QuizQuestion | null>(
+    null
+  );
+  const canvasRef = useRef<CanvasHandle>(null);
+  const [selectedOptionId, setSelectedOptionId] = useState<number | null>(null);
 
-  return (
-    <div className="w-full px-2 py-2 md:px-4 md:py-8">
-      <div className="mx-auto w-full max-w-5xl">
-        {/* Judul Halaman */}
-        <div className="bg-sidebar-border rounded-2xl border p-6">
-          <h1 className="font-sora text-primary text-center text-2xl font-bold md:text-3xl">
-            Pilih level
-          </h1>
-        </div>
-        <div className="mt-5 flex flex-col gap-2">
-          {levels.map((level) => (
-            <Link to={level.path} key={level.id}>
-              <Card className="hover:shadow-primary p-4 transition ease-linear hover:opacity-85">
-                <CardContent className="p-0">
-                  <div className="flex flex-row items-center justify-between">
-                    <div className="flex flex-row items-center justify-start gap-4">
-                      <p className="font-bold">{level.id}.</p>
-                      <p>{level.title}</p>
+  // --- STATE BARU UNTUK PAGINASI & AUTO-SCROLL ---
+  const [currentPage, setCurrentPage] = useState(0);
+  const levelRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const LEVELS_PER_PAGE = 10;
+  // --- AKHIR STATE BARU ---
+
+  useEffect(() => {
+    const fetchLevels = async () => {
+      try {
+        const response = await api.get<ApiResponse<QuizLevel[]>>(
+          'v1/lessons/1/quizzes'
+        );
+        const fetchedLevels = response.data.data;
+        setLevels(fetchedLevels);
+
+        // --- LOGIKA BARU: Tentukan halaman awal dan scroll ---
+        const lastCompletedIndex = fetchedLevels
+          .map((l) => l.is_completed)
+          .lastIndexOf(true);
+        const targetLevelIndex =
+          lastCompletedIndex === -1 ? 0 : lastCompletedIndex + 1;
+        const finalTargetIndex = Math.min(
+          targetLevelIndex,
+          fetchedLevels.length - 1
+        );
+
+        const targetPage = Math.floor(finalTargetIndex / LEVELS_PER_PAGE);
+        setCurrentPage(targetPage);
+
+        // Auto-scroll setelah render
+        setTimeout(() => {
+          levelRefs.current[finalTargetIndex]?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          });
+        }, 100); // Delay kecil untuk memastikan DOM sudah siap
+        // --- AKHIR LOGIKA BARU ---
+
+        setView('level_selection');
+      } catch (error) {
+        console.error('Gagal mengambil daftar level:', error);
+      }
+    };
+    fetchLevels();
+  }, []);
+
+  const handleStartQuiz = async (quizId: number) => {
+    setView('loading');
+    try {
+      const response = await api.get<ApiResponse<QuizQuestion>>(
+        `v1/quizzes/${quizId}/start`
+      );
+      setCurrentQuestion(response.data.data);
+      setCorrectAnswersCount(0);
+      setTotalQuizQuestions(response.data.data.total_questions);
+      setXpEarned(0);
+      setView('in_quiz');
+    } catch (error) {
+      console.error('Gagal memulai kuis:', error);
+      setView('level_selection');
+    }
+  };
+
+  const processAndShowFeedback = (responseData: SubmitResponseData) => {
+    if (responseData.is_correct) {
+      setCorrectAnswersCount((prevCount) => prevCount + 1);
+    }
+    setFeedback({ isCorrect: responseData.is_correct, isOpen: true });
+    setNextQuestionData(responseData.next_question);
+    if (responseData.quiz_finished && responseData.final_result) {
+      setXpEarned(responseData.final_result.xp_earned);
+    }
+  };
+
+  const handleImageChoiceSubmit = async (optionId: number) => {
+    if (isAnswered || !currentQuestion) return;
+    setIsAnswered(true);
+    setSelectedOptionId(optionId);
+    try {
+      const response = await api.post<ApiResponse<SubmitResponseData>>(
+        'v1/quizzes/submit',
+        {
+          session_id: currentQuestion.session_id,
+          question_id: currentQuestion.question_id,
+          option_id: optionId,
+        }
+      );
+      processAndShowFeedback(response.data.data);
+    } catch (error) {
+      console.error('Gagal mengirim jawaban:', error);
+      setIsAnswered(false);
+    }
+  };
+
+  const handleDrawingSubmit = async () => {
+    if (isAnswered || !canvasRef.current || !currentQuestion) return;
+    setIsAnswered(true);
+    const userImage = canvasRef.current.getStage()?.toDataURL();
+    if (!userImage) {
+      setIsAnswered(false);
+      return;
+    }
+    resemble(userImage)
+      .compareTo(`/assets/hurufaksara/${currentQuestion.image_url}`)
+      .onComplete(async (data) => {
+        const score = data.misMatchPercentage < 6 ? 100 : 0;
+        try {
+          const response = await api.post<ApiResponse<SubmitResponseData>>(
+            'v1/quizzes/submit-drawing',
+            {
+              session_id: currentQuestion.session_id,
+              question_id: currentQuestion.question_id,
+              score: score,
+            }
+          );
+          processAndShowFeedback(response.data.data);
+        } catch (error) {
+          console.error('Gagal mengirim jawaban gambar:', error);
+          setIsAnswered(false);
+        }
+      });
+  };
+
+  const handleNext = async () => {
+    setFeedback({ ...feedback, isOpen: false });
+    setIsAnswered(false);
+    setSelectedOptionId(null);
+    canvasRef.current?.reset();
+
+    if (nextQuestionData) {
+      setCurrentQuestion(nextQuestionData);
+      setNextQuestionData(null);
+    } else {
+      setView('loading');
+      try {
+        const profileRes =
+          await api.get<ApiResponse<UserProfile>>('v1/users/profile');
+        setUserProfile(profileRes.data.data);
+        setView('results');
+      } catch (error) {
+        console.error('Gagal mengambil profil setelah kuis:', error);
+        setView('level_selection');
+      }
+    }
+  };
+
+  const handleBackToLevels = () => {
+    setView('loading');
+    const fetchLevels = async () => {
+      try {
+        const response = await api.get<ApiResponse<QuizLevel[]>>(
+          'v1/lessons/1/quizzes'
+        );
+        setLevels(response.data.data);
+        setCurrentQuestion(null);
+        setView('level_selection');
+      } catch (error) {
+        console.error('Gagal mengambil daftar level:', error);
+      }
+    };
+    fetchLevels();
+  };
+
+  // --- KOMPONEN TAMPILAN ---
+
+  const LevelSelectionView = () => {
+    const totalPages = Math.ceil(levels.length / LEVELS_PER_PAGE);
+    const displayedLevels = levels.slice(
+      currentPage * LEVELS_PER_PAGE,
+      (currentPage + 1) * LEVELS_PER_PAGE
+    );
+
+    return (
+      <div className="w-full px-2 py-2 md:px-4 md:py-8">
+        <div className="mx-auto w-full max-w-5xl">
+          <div className="bg-sidebar-border rounded-2xl border p-6">
+            <h1 className="font-sora text-primary text-center text-2xl font-bold md:text-3xl">
+              Pilih Level
+            </h1>
+          </div>
+          <div className="mt-5 flex flex-col gap-2">
+            {displayedLevels.map((level) => {
+              const originalIndex = levels.findIndex((l) => l.id === level.id);
+              const isLocked =
+                originalIndex > 0 &&
+                !(levels[originalIndex - 1]?.is_completed ?? false);
+              return (
+                <Card
+                  ref={(el) => {
+                    levelRefs.current[originalIndex] = el;
+                  }}
+                  key={level.id}
+                  onClick={() => !isLocked && handleStartQuiz(level.id)}
+                  className={`p-4 transition ease-linear ${
+                    isLocked
+                      ? 'cursor-not-allowed opacity-50'
+                      : 'hover:shadow-primary cursor-pointer hover:opacity-85'
+                  }`}
+                >
+                  <CardContent className="p-0">
+                    <div className="flex flex-row items-center justify-between">
+                      <div className="flex flex-row items-center justify-start gap-4">
+                        <p className="font-bold">{level.level}.</p>
+                        <p>{level.title}</p>
+                      </div>
+                      {isLocked ? (
+                        <Lock className="text-muted-foreground h-6 w-6" />
+                      ) : (
+                        level.is_completed && (
+                          <Check className="h-6 w-6 text-green-500" />
+                        )
+                      )}
                     </div>
-                    {level.isCompleted && (
-                      <Check className="h-6 w-6 text-green-500" />
-                    )}
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
+          {totalPages > 1 && (
+            <div className="mt-6 flex items-center justify-center gap-4">
+              <Button
+                onClick={() => setCurrentPage((p) => p - 1)}
+                disabled={currentPage === 0}
+                size="icon"
+              >
+                <ChevronLeft />
+              </Button>
+              <span className="font-semibold">
+                Halaman {currentPage + 1} dari {totalPages}
+              </span>
+              <Button
+                onClick={() => setCurrentPage((p) => p + 1)}
+                disabled={currentPage >= totalPages - 1}
+                size="icon"
+              >
+                <ChevronRight />
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const QuizView = () => {
+    const [playAudio] = useSound(`/assets/audio/${currentQuestion?.audio_url}`);
+    const progressPercentage = currentQuestion
+      ? ((currentQuestion.current_question_index - 1) /
+          currentQuestion.total_questions) *
+        100
+      : 0;
+
+    if (!currentQuestion) return <LevelSelectionView />;
+
+    return (
+      <div className="mt-20 flex w-full flex-col items-center justify-center p-5">
+        <div className="mb-5 w-full max-w-4xl">
+          <p className="text-center text-lg font-semibold">
+            Soal {currentQuestion.current_question_index} dari{' '}
+            {currentQuestion.total_questions}
+          </p>
+          <Progress value={progressPercentage} className="mt-2" />
+        </div>
+
+        <div className="w-full max-w-4xl">
+          {currentQuestion.question_type === 'pilihan_ganda_aksara' && (
+            <div className="mt-5 flex w-full flex-col items-center">
+              <Card className="w-full max-w-2xl">
+                <CardHeader>
+                  <CardTitle className="text-center text-xl">
+                    {currentQuestion.question_text}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex justify-center p-4">
+                  <img
+                    src={`/assets/hurufaksara/${currentQuestion.image_url}`}
+                    alt="Aksara Batak"
+                    className="h-48 w-48 rounded-md md:h-64 md:w-64"
+                  />
+                </CardContent>
+                <div className="mr-3 flex justify-end px-3">
+                  <Button
+                    onClick={() => playAudio()}
+                    variant={'circle-default'}
+                    size={'icon'}
+                    className="size-12"
+                  >
+                    <Volume2 />
+                  </Button>
+                </div>
+              </Card>
+              <div className="mt-6 grid w-full max-w-2xl grid-cols-2 gap-4 md:grid-cols-4">
+                {currentQuestion.options?.map((option) => (
+                  <Button
+                    key={option.id}
+                    onClick={() => handleImageChoiceSubmit(option.id)}
+                    disabled={isAnswered}
+                    variant={
+                      isAnswered && selectedOptionId === option.id
+                        ? feedback.isCorrect
+                          ? 'default'
+                          : 'destructive'
+                        : 'secondary'
+                    }
+                  >
+                    {option.option_text || option.aksara_text}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {currentQuestion.question_type === 'pilihan_ganda_batak' && (
+            <div className="mt-5 flex w-full flex-col items-center">
+              <Card className="w-full max-w-2xl">
+                <CardHeader>
+                  <CardTitle className="text-center text-xl">
+                    {currentQuestion.question_text}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex justify-center p-4"></CardContent>
+              </Card>
+              <div className="mt-6 grid w-full max-w-2xl grid-cols-2 gap-4 md:grid-cols-4">
+                {currentQuestion.options?.map((option) => (
+                  <Button
+                    key={option.id}
+                    onClick={() => handleImageChoiceSubmit(option.id)}
+                    disabled={isAnswered}
+                    variant={
+                      isAnswered && selectedOptionId === option.id
+                        ? feedback.isCorrect
+                          ? 'default'
+                          : 'destructive'
+                        : 'secondary'
+                    }
+                  >
+                    {option.option_text || option.aksara_text}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {currentQuestion.question_type === 'nulis_aksara' && (
+            <div className="mt-5 flex w-full flex-col items-center">
+              <Card className="inline-block w-auto">
+                <CardHeader>
+                  <CardTitle className="text-center text-xl">
+                    {currentQuestion.question_text}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-4">
+                  <div className="flex flex-col items-center gap-5 md:flex-row">
+                    <img
+                      src={`/assets/hurufaksara/${currentQuestion.image_url}`}
+                      alt="Karakter referensi"
+                      className="max-h-[500px] max-w-[500px] rounded-md border border-solid"
+                    />
+                    <WritingCanvas
+                      ref={canvasRef}
+                      imageUrl={`/assets/hurufaksara/${currentQuestion.image_url}`}
+                    />
                   </div>
                 </CardContent>
               </Card>
-            </Link>
-          ))}
+              <div className="mt-6">
+                <Button onClick={handleDrawingSubmit} disabled={isAnswered}>
+                  Periksa Jawaban
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+    );
+  };
+
+  const ResultsView = () => {
+    const score =
+      totalQuizQuestions > 0
+        ? Math.round((correctAnswersCount / totalQuizQuestions) * 100)
+        : 0;
+
+    return (
+      <div className="mt-20 flex items-center justify-center">
+        <Card className="w-full max-w-[750px] px-5 py-5">
+          <CardHeader>
+            <h2 className="mb-5 text-center text-2xl font-bold">
+              Kuis Selesai!
+            </h2>
+            {score > 50 ? (
+              <EmojiHunggingFace />
+            ) : score === 50 ? (
+              <EmojiGrimacing />
+            ) : (
+              <EmojiSad />
+            )}
+          </CardHeader>
+          <CardContent className="text-center">
+            <h3 className="mt-4 text-xl">Nilai Akhir Anda:</h3>
+            <h1
+              className={`text-7xl font-bold ${
+                score > 50
+                  ? 'text-green-500'
+                  : score === 50
+                    ? 'text-muted-foreground'
+                    : 'text-red-500'
+              }`}
+            >
+              {score}
+            </h1>
+            <p className="mt-4 text-lg">
+              XP Didapat:{' '}
+              <span className="text-primary font-bold">+{xpEarned}</span>
+            </p>
+            <p className="mt-1 text-lg">
+              Total XP Sekarang:{' '}
+              <span className="font-bold">{userProfile?.total_xp}</span>
+            </p>
+            <div className="mt-10 flex items-center justify-center gap-6">
+              <Button onClick={handleBackToLevels} size="lg">
+                Kembali ke Level
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  };
+
+  if (view === 'loading') {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loader />
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full">
+      {view === 'level_selection' && <LevelSelectionView />}
+      {view === 'in_quiz' && <QuizView />}
+      {view === 'results' && <ResultsView />}
+
+      <AlertDialog open={feedback.isOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {feedback.isCorrect ? (
+                <div className="flex flex-col items-center justify-center">
+                  <Success />
+                  <p className="text-center text-xl font-bold text-green-400">
+                    Benar!
+                  </p>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center">
+                  <Fail />
+                  <p className="text-center text-xl font-bold text-red-400">
+                    Salah!
+                  </p>
+                </div>
+              )}
+            </AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={handleNext}>
+              Lanjut <ArrowBigRightDash className="ml-2" />
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

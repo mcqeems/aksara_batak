@@ -13,8 +13,8 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Link } from 'react-router-dom';
 import { Crown, ChevronDown } from 'lucide-react';
-import { RingLoader } from 'react-spinners';
 import { Button } from '@/components/ui/button';
+import Loader from '@/components/ui/loader';
 
 // Tipe untuk satu entri di leaderboard
 interface LeaderboardUser {
@@ -49,15 +49,9 @@ function Leaderboard() {
   const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [primaryColor, setPrimaryColor] = useState('#000000');
   const [visibleCount, setVisibleCount] = useState(10);
 
   useEffect(() => {
-    const color = getComputedStyle(document.documentElement)
-      .getPropertyValue('--primary')
-      .trim();
-    setPrimaryColor(color);
-
     const fetchAllData = async () => {
       try {
         const [leaderboardRes, profileRes] = await Promise.all([
@@ -91,7 +85,7 @@ function Leaderboard() {
   if (loading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
-        <RingLoader color={primaryColor} size={75} />
+        <Loader />
       </div>
     );
   }

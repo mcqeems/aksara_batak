@@ -1,7 +1,34 @@
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import api from '@/services/api';
+
+interface Lessons {
+  id: number;
+  title: string;
+  description: string;
+  icon_url: string;
+}
+
+interface ApiResponse<T> {
+  data: T;
+}
 
 function Learn() {
+  const [Lessons, setLessons] = useState<Lessons[]>([]);
+
+  useEffect(() => {
+    const fetchLessons = async () => {
+      try {
+        const response = await api.get<ApiResponse<Lessons[]>>('v1/lessons');
+        setLessons(response.data.data);
+      } catch (error) {
+        console.log('Gagal mengambil data: ' + error);
+      }
+    };
+    fetchLessons();
+  }, []);
+
   return (
     <div className="w-full px-2 py-2 md:px-4 md:py-8">
       <div className="mx-auto w-full max-w-5xl">
@@ -12,29 +39,20 @@ function Learn() {
           </h1>
         </div>
         <div className="my-5 grid grid-cols-2 gap-5">
-          <Link to="/learn/aksara">
-            <Card className="hover:shadow-primary p-5 transition ease-linear hover:opacity-85">
-              <CardContent>
-                <img
-                  className="h-full max-h-[300px] w-full max-w-[300px] self-center justify-self-center rounded-3xl"
-                  src="/assets/hurufaksara/konsonan/wa.png"
-                ></img>
-              </CardContent>
-              <CardTitle className="text-center">Aksara Batak</CardTitle>
-            </Card>
-          </Link>
-
-          <Link to="/learn/toba">
-            <Card className="hover:shadow-primary p-5 transition ease-linear hover:opacity-85">
-              <CardContent>
-                <img
-                  className="h-full max-h-[300px] w-full max-w-[300px] self-center justify-self-center rounded-3xl"
-                  src="/assets/foto-lain/suku-batak.png"
-                ></img>
-              </CardContent>
-              <CardTitle className="text-center">Batak Toba</CardTitle>
-            </Card>
-          </Link>
+          {Lessons.map((lesson) => (
+            <Link to={`/learn/${lesson.title.toLowerCase()}`} key={lesson.id}>
+              <Card className="hover:shadow-primary p-5 transition ease-linear hover:opacity-85">
+                <CardContent>
+                  <img
+                    className="h-full max-h-[300px] w-full max-w-[300px] self-center justify-self-center rounded-3xl"
+                    src={'/assets/lesson_icons/' + lesson.icon_url}
+                    alt={lesson.title}
+                  />
+                </CardContent>
+                <CardTitle className="text-center">{lesson.title}</CardTitle>
+              </Card>
+            </Link>
+          ))}
         </div>
       </div>
     </div>
