@@ -15,8 +15,7 @@ import Sejarah from './pages/pengenalan/sejarah/Sejarah';
 import Chat from './pages/dashboard/chat/Chat';
 import Leaderboard from './pages/dashboard/leaderboard/Leaderboard';
 import Learn from './pages/dashboard/learn/Learn';
-import Toba from './pages/dashboard/learn/toba/Toba';
-import AksaraLearn from './pages/dashboard/learn/aksara/AksaraLearn';
+import LessonDetail from './pages/dashboard/learn/LessonDetail';
 import ProtectedRoute from './components/layout/ProtectedRoutes';
 import Aksara from './pages/dashboard/aksara/Aksara';
 
@@ -41,8 +40,7 @@ function App() {
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/aksara" element={<Aksara />} />
         <Route path="/learn" element={<Learn />} />
-        <Route path="/learn/aksara" element={<AksaraLearn />} />
-        <Route path="/learn/toba" element={<Toba />} />
+        <Route path="/learn/:slug" element={<LessonDetail />} />
       </Route>
 
       {/* Not Found */}

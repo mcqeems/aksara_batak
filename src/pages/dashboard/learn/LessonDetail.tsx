@@ -1,6 +1,7 @@
-// AksaraLearn.tsx (Dengan Paginasi & Auto-Scroll)
+// LessonDetail.tsx (Dengan Logika XP yang Diperbaiki)
 
 import { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -34,8 +35,14 @@ import EmojiHunggingFace from '@/components/icon/EmojiHunggingFace';
 import EmojiSad from '@/components/icon/EmojiSad';
 import EmojiGrimacing from '@/components/icon/EmojiGrimacing';
 import Loader from '@/components/ui/loader';
+import { slugify } from '@/lib/utils';
 
 // --- DEFINISI TIPE ---
+
+interface Lesson {
+  id: number;
+  title: string;
+}
 
 interface QuizLevel {
   id: number;
@@ -87,7 +94,9 @@ interface ApiResponse<T> {
 
 // --- KOMPONEN UTAMA ---
 
-function AksaraLearn() {
+function LessonDetail() {
+  const { slug } = useParams<{ slug: string }>();
+
   const [view, setView] = useState<
     'loading' | 'level_selection' | 'in_quiz' | 'results'
   >('loading');
@@ -107,53 +116,70 @@ function AksaraLearn() {
   const canvasRef = useRef<CanvasHandle>(null);
   const [selectedOptionId, setSelectedOptionId] = useState<number | null>(null);
 
-  // --- STATE BARU UNTUK PAGINASI & AUTO-SCROLL ---
   const [currentPage, setCurrentPage] = useState(0);
   const levelRefs = useRef<(HTMLDivElement | null)[]>([]);
   const LEVELS_PER_PAGE = 10;
-  // --- AKHIR STATE BARU ---
+  const PASSING_SCORE = 60;
+
+  // State baru untuk melacak apakah kuis yang dikerjakan sudah selesai sebelumnya
+  const [isRepeatingCompletedQuiz, setIsRepeatingCompletedQuiz] =
+    useState(false);
 
   useEffect(() => {
-    const fetchLevels = async () => {
+    const fetchLessonData = async () => {
+      if (!slug) return;
+      setView('loading');
       try {
-        const response = await api.get<ApiResponse<QuizLevel[]>>(
-          'v1/lessons/1/quizzes'
-        );
-        const fetchedLevels = response.data.data;
-        setLevels(fetchedLevels);
+        const lessonsResponse =
+          await api.get<ApiResponse<Lesson[]>>('v1/lessons');
+        const allLessons = lessonsResponse.data.data;
+        const currentLesson = allLessons.find((l) => slugify(l.title) === slug);
 
-        // --- LOGIKA BARU: Tentukan halaman awal dan scroll ---
-        const lastCompletedIndex = fetchedLevels
-          .map((l) => l.is_completed)
-          .lastIndexOf(true);
-        const targetLevelIndex =
-          lastCompletedIndex === -1 ? 0 : lastCompletedIndex + 1;
-        const finalTargetIndex = Math.min(
-          targetLevelIndex,
-          fetchedLevels.length - 1
-        );
+        if (currentLesson) {
+          const levelsResponse = await api.get<ApiResponse<QuizLevel[]>>(
+            `v1/lessons/${currentLesson.id}/quizzes`
+          );
+          const fetchedLevels = levelsResponse.data.data;
+          setLevels(fetchedLevels);
 
-        const targetPage = Math.floor(finalTargetIndex / LEVELS_PER_PAGE);
-        setCurrentPage(targetPage);
+          const lastCompletedIndex = fetchedLevels
+            .map((l) => l.is_completed)
+            .lastIndexOf(true);
+          const targetLevelIndex =
+            lastCompletedIndex === -1 ? 0 : lastCompletedIndex + 1;
+          const finalTargetIndex = Math.min(
+            targetLevelIndex,
+            fetchedLevels.length - 1
+          );
 
-        // Auto-scroll setelah render
-        setTimeout(() => {
-          levelRefs.current[finalTargetIndex]?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center',
-          });
-        }, 100); // Delay kecil untuk memastikan DOM sudah siap
-        // --- AKHIR LOGIKA BARU ---
+          const targetPage = Math.floor(finalTargetIndex / LEVELS_PER_PAGE);
+          setCurrentPage(targetPage);
 
-        setView('level_selection');
+          setTimeout(() => {
+            levelRefs.current[finalTargetIndex]?.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+            });
+          }, 100);
+
+          setView('level_selection');
+        } else {
+          console.error(`Lesson with slug "${slug}" not found.`);
+          setView('level_selection');
+        }
       } catch (error) {
-        console.error('Gagal mengambil daftar level:', error);
+        console.error('Gagal mengambil data pelajaran:', error);
       }
     };
-    fetchLevels();
-  }, []);
+
+    fetchLessonData();
+  }, [slug]);
 
   const handleStartQuiz = async (quizId: number) => {
+    // Cek status level sebelum kuis dimulai
+    const levelInfo = levels.find((l) => l.id === quizId);
+    setIsRepeatingCompletedQuiz(levelInfo?.is_completed ?? false);
+
     setView('loading');
     try {
       const response = await api.get<ApiResponse<QuizQuestion>>(
@@ -176,9 +202,10 @@ function AksaraLearn() {
     }
     setFeedback({ isCorrect: responseData.is_correct, isOpen: true });
     setNextQuestionData(responseData.next_question);
-    if (responseData.quiz_finished && responseData.final_result) {
-      setXpEarned(responseData.final_result.xp_earned);
-    }
+    // --- PERBAIKAN: Hapus blok 'if' ini agar XP tidak diambil dari API per soal ---
+    // if (responseData.quiz_finished && responseData.final_result) {
+    //   setXpEarned(responseData.final_result.xp_earned);
+    // }
   };
 
   const handleImageChoiceSubmit = async (optionId: number) => {
@@ -240,6 +267,21 @@ function AksaraLearn() {
       setCurrentQuestion(nextQuestionData);
       setNextQuestionData(null);
     } else {
+      // Kuis selesai, sekarang hitung skor dan tentukan XP
+      const score =
+        totalQuizQuestions > 0
+          ? Math.round((correctAnswersCount / totalQuizQuestions) * 100)
+          : 0;
+
+      // --- LOGIKA BARU: Tentukan XP berdasarkan kelulusan dan status pengulangan ---
+      const passed = score >= PASSING_SCORE;
+      if (passed && !isRepeatingCompletedQuiz) {
+        setXpEarned(50);
+      } else {
+        setXpEarned(0);
+      }
+      // --- AKHIR LOGIKA BARU ---
+
       setView('loading');
       try {
         const profileRes =
@@ -256,13 +298,21 @@ function AksaraLearn() {
   const handleBackToLevels = () => {
     setView('loading');
     const fetchLevels = async () => {
+      if (!slug) return;
       try {
-        const response = await api.get<ApiResponse<QuizLevel[]>>(
-          'v1/lessons/1/quizzes'
-        );
-        setLevels(response.data.data);
-        setCurrentQuestion(null);
-        setView('level_selection');
+        const lessonsResponse =
+          await api.get<ApiResponse<Lesson[]>>('v1/lessons');
+        const allLessons = lessonsResponse.data.data;
+        const currentLesson = allLessons.find((l) => slugify(l.title) === slug);
+
+        if (currentLesson) {
+          const response = await api.get<ApiResponse<QuizLevel[]>>(
+            `v1/lessons/${currentLesson.id}/quizzes`
+          );
+          setLevels(response.data.data);
+          setCurrentQuestion(null);
+          setView('level_selection');
+        }
       } catch (error) {
         console.error('Gagal mengambil daftar level:', error);
       }
@@ -270,7 +320,7 @@ function AksaraLearn() {
     fetchLevels();
   };
 
-  // --- KOMPONEN TAMPILAN ---
+  // --- KOMPONEN TAMPILAN (Tidak ada perubahan) ---
 
   const LevelSelectionView = () => {
     const totalPages = Math.ceil(levels.length / LEVELS_PER_PAGE);
@@ -491,6 +541,8 @@ function AksaraLearn() {
         ? Math.round((correctAnswersCount / totalQuizQuestions) * 100)
         : 0;
 
+    const passed = score >= PASSING_SCORE;
+
     return (
       <div className="mt-20 flex items-center justify-center">
         <Card className="w-full max-w-[750px] px-5 py-5">
@@ -498,21 +550,29 @@ function AksaraLearn() {
             <h2 className="mb-5 text-center text-2xl font-bold">
               Kuis Selesai!
             </h2>
-            {score > 50 ? (
+            {score >= PASSING_SCORE ? (
               <EmojiHunggingFace />
-            ) : score === 50 ? (
+            ) : score >= 40 ? (
               <EmojiGrimacing />
             ) : (
               <EmojiSad />
             )}
           </CardHeader>
           <CardContent className="text-center">
+            <p
+              className={`text-lg font-semibold ${passed ? 'text-green-500' : 'text-red-500'}`}
+            >
+              {passed
+                ? 'Selamat, Anda Lulus!'
+                : 'Coba lagi, Anda belum mencapai skor minimal.'}
+            </p>
+
             <h3 className="mt-4 text-xl">Nilai Akhir Anda:</h3>
             <h1
               className={`text-7xl font-bold ${
-                score > 50
+                score >= PASSING_SCORE
                   ? 'text-green-500'
-                  : score === 50
+                  : score >= 40
                     ? 'text-muted-foreground'
                     : 'text-red-500'
               }`}
@@ -584,4 +644,4 @@ function AksaraLearn() {
   );
 }
 
-export default AksaraLearn;
+export default LessonDetail;

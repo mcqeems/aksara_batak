@@ -2,6 +2,7 @@ import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api from '@/services/api';
+import { slugify } from '@/lib/utils';
 
 interface Lessons {
   id: number;
@@ -40,7 +41,7 @@ function Learn() {
         </div>
         <div className="my-5 grid grid-cols-2 gap-5">
           {Lessons.map((lesson) => (
-            <Link to={`/learn/${lesson.title.toLowerCase()}`} key={lesson.id}>
+            <Link to={`/learn/${slugify(lesson.title)}`} key={lesson.id}>
               <Card className="hover:shadow-primary p-5 transition ease-linear hover:opacity-85">
                 <CardContent>
                   <img
