@@ -6,6 +6,7 @@ import Login from './pages/login/Login';
 import Homepage from './pages/homepage/Homepage';
 import Dashboard from './pages/dashboard/Dashboard';
 import About from './pages/about/About';
+import Contact from './pages/contact/Contact';
 import NotFound from './pages/notfound/NotFound';
 import Mulai from './pages/mulai/Mulai';
 import Pengenalan from './pages/pengenalan/Pengenalan';
@@ -34,12 +35,14 @@ function App() {
       <Route path="/pengenalan/sejarah" element={<Sejarah />} />
 
       {/* Dashboard */}
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/chat" element={<Chat />} />
-      <Route path="/leaderboard" element={<Leaderboard />} />
-      <Route path="/learn" element={<Learn />} />
-      <Route path="/learn/aksara" element={<AksaraLearn />} />
-      <Route path="/learn/toba" element={<Toba />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/aksara" element={<Aksara />} />
+        <Route path="/learn" element={<Learn />} />
+        <Route path="/learn/:slug" element={<LessonDetail />} />
+      </Route>
 
       {/* Not Found */}
       <Route path="*" element={<NotFound />} />

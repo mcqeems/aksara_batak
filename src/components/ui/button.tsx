@@ -1,12 +1,10 @@
-/* eslint-disable react-refresh/only-export-components */
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
-// -- VARIAN UNTUK CONTAINER (EFEK 3D) --
-// Ini adalah bagian 'bawah' atau 'bayangan' dari tombol 3D kita.
+// Tidak ada perubahan di sini
 const buttonContainerVariants = cva(
   'rounded-lg transition-all duration-150 ease-in-out disabled:pointer-events-none disabled:opacity-50',
   {
@@ -28,8 +26,7 @@ const buttonContainerVariants = cva(
   }
 );
 
-// -- VARIAN UNTUK TOMBOL UTAMA (BAGIAN ATAS) --
-// Ini adalah bagian yang terlihat dan berisi teks/ikon.
+// Tidak ada perubahan di sini
 const buttonFaceVariants = cva(
   'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 w-full',
   {
@@ -69,7 +66,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
 
-    // Untuk varian 'link', kita tidak perlu struktur 3D
     if (variant === 'link') {
       return (
         <Comp
@@ -80,16 +76,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       );
     }
 
-    // Untuk varian lain, kita gunakan struktur 3D
     return (
       <button
-        className={cn(buttonContainerVariants({ variant }), className)}
+        // Wadah luar sekarang HANYA mengurus varian 3D-nya.
+        className={cn(buttonContainerVariants({ variant }))}
         disabled={props.disabled}
         ref={ref}
       >
         <Comp
-          className={cn(buttonFaceVariants({ variant, size }))}
-          // Props asli (seperti onClick) harus ada di elemen 'Comp'
+          // Wajah tombol sekarang menerima semua styling: varian, ukuran, DAN className dari luar.
+          // Ini memastikan 'h-28' dan 'flex-col' Anda diterapkan di sini.
+          className={cn(buttonFaceVariants({ variant, size }), className)}
           {...props}
         />
       </button>

@@ -15,11 +15,13 @@ export type CanvasHandle = {
   getStage: () => Konva.Stage | null;
 };
 
-// PERBAIKAN: Gunakan tipe 'object' sebagai pengganti '{}'
-type WritingCanvasProps = object;
+// PERBAIKAN: Tambahkan `imageUrl` ke props untuk membuatnya dinamis
+type WritingCanvasProps = {
+  imageUrl: string;
+};
 
 const WritingCanvas = forwardRef<CanvasHandle, WritingCanvasProps>(
-  (props, ref) => {
+  ({ imageUrl }, ref) => {
     // ... sisa kode tidak perlu diubah ...
     type LineType = { points: number[] };
     const [lines, setLines] = useState<LineType[]>([]);
@@ -35,7 +37,7 @@ const WritingCanvas = forwardRef<CanvasHandle, WritingCanvasProps>(
       getStage: () => stageRef.current, // Ekspos akses ke stage
     }));
 
-    const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
+    const handleMouseDown = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
       isDrawing.current = true;
       const pos = e.target.getStage()?.getPointerPosition();
       if (pos) {
@@ -43,7 +45,7 @@ const WritingCanvas = forwardRef<CanvasHandle, WritingCanvasProps>(
       }
     };
 
-    const handleMouseMove = (e: KonvaEventObject<MouseEvent>) => {
+    const handleMouseMove = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
       if (!isDrawing.current) return;
       const stage = e.target.getStage();
       if (stage) {
@@ -68,7 +70,7 @@ const WritingCanvas = forwardRef<CanvasHandle, WritingCanvasProps>(
       <div className="relative h-[500px] w-[500px]">
         <img
           className="absolute top-0 left-0 z-10 h-full w-full object-cover opacity-30"
-          src="/assets/hurufaksara/a.png"
+          src={imageUrl} // PERBAIKAN: Gunakan prop imageUrl yang dinamis
         ></img>
         <Stage
           width={500}
@@ -76,6 +78,9 @@ const WritingCanvas = forwardRef<CanvasHandle, WritingCanvasProps>(
           onMouseDown={handleMouseDown}
           onMousemove={handleMouseMove}
           onMouseup={handleMouseUp}
+          onTouchStart={handleMouseDown}
+          onTouchMove={handleMouseMove}
+          onTouchEnd={handleMouseUp}
           style={{
             border: '2px dashed #555',
             position: 'absolute',
