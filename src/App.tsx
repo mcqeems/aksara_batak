@@ -16,7 +16,8 @@ import Leaderboard from './pages/dashboard/leaderboard/Leaderboard';
 import Learn from './pages/dashboard/learn/Learn';
 import Toba from './pages/dashboard/learn/toba/Toba';
 import AksaraLearn from './pages/dashboard/learn/aksara/AksaraLearn';
-import { Contact } from 'lucide-react';
+// import { Contact } from 'lucide-react';
+import Contact from './pages/contact/Contact';
 
 function App() {
   return (
