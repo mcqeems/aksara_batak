@@ -1,5 +1,3 @@
-// LessonDetail.tsx (Dengan Logika XP yang Diperbaiki)
-
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -119,7 +117,7 @@ function LessonDetail() {
   const [currentPage, setCurrentPage] = useState(0);
   const levelRefs = useRef<(HTMLDivElement | null)[]>([]);
   const LEVELS_PER_PAGE = 10;
-  const PASSING_SCORE = 60;
+  const PASSING_SCORE = 70;
 
   // State baru untuk melacak apakah kuis yang dikerjakan sudah selesai sebelumnya
   const [isRepeatingCompletedQuiz, setIsRepeatingCompletedQuiz] =
@@ -239,14 +237,14 @@ function LessonDetail() {
     resemble(userImage)
       .compareTo(`/assets/hurufaksara/${currentQuestion.image_url}`)
       .onComplete(async (data) => {
-        const score = data.misMatchPercentage < 6 ? 100 : 0;
+        const value = data.misMatchPercentage < 6 ? true : false;
         try {
           const response = await api.post<ApiResponse<SubmitResponseData>>(
             'v1/quizzes/submit-drawing',
             {
               session_id: currentQuestion.session_id,
               question_id: currentQuestion.question_id,
-              score: score,
+              is_correct: value,
             }
           );
           processAndShowFeedback(response.data.data);
