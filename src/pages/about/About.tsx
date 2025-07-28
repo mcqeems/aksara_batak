@@ -1,7 +1,17 @@
 import { Navbar } from '@/components/layout/navbar';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BookOpen, Users, Lightbulb, Heart, Instagram, Github, Linkedin, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  BookOpen,
+  Users,
+  Lightbulb,
+  Heart,
+  Instagram,
+  Github,
+  Linkedin,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Footer } from '@/components/layout/footer';
 import { useState, useEffect, useCallback } from 'react';
@@ -15,7 +25,7 @@ const TexturedBackground = () => (
       alt="Background Texture"
       className="h-full w-full object-cover opacity-20 dark:opacity-10"
     />
-    <div className="absolute inset-0 bg-gradient-to-b from-background/90 to-transparent"></div>
+    <div className="from-background/90 absolute inset-0 bg-gradient-to-b to-transparent"></div>
   </div>
 );
 
@@ -105,17 +115,17 @@ const ExpertCard = ({
     <div className="flex gap-4">
       {instagramLink && (
         <a href={instagramLink} target="_blank" rel="noopener noreferrer">
-          <Instagram className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors" />
+          <Instagram className="text-muted-foreground hover:text-primary h-6 w-6 transition-colors" />
         </a>
       )}
       {githubLink && (
         <a href={githubLink} target="_blank" rel="noopener noreferrer">
-          <Github className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors" />
+          <Github className="text-muted-foreground hover:text-primary h-6 w-6 transition-colors" />
         </a>
       )}
       {linkedinLink && (
         <a href={linkedinLink} target="_blank" rel="noopener noreferrer">
-          <Linkedin className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors" />
+          <Linkedin className="text-muted-foreground hover:text-primary h-6 w-6 transition-colors" />
         </a>
       )}
     </div>
@@ -127,7 +137,11 @@ const TestimonialCard = ({
   quote,
   name,
   title,
-}: { quote: string; name: string; title: string }) => (
+}: {
+  quote: string;
+  name: string;
+  title: string;
+}) => (
   <motion.div
     className="bg-card/50 border-border/50 flex flex-col items-center gap-4 rounded-xl border p-8 text-center shadow-lg backdrop-blur-sm"
     initial={{ opacity: 0, y: 20 }}
@@ -146,7 +160,9 @@ const TestimonialCard = ({
 // Testimonial Carousel Component
 const TestimonialCarousel = ({
   testimonials,
-}: { testimonials: { quote: string; name: string; title: string }[] }) => {
+}: {
+  testimonials: { quote: string; name: string; title: string }[];
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleNext = useCallback(() => {
@@ -200,30 +216,36 @@ function About() {
   const testimonials = [
     {
       quote:
-        "PodaHoras benar-benar mengubah cara saya belajar Aksara Batak. Interaktif dan sangat membantu!",
-      name: "Rina S. - Pelajar",
-      title: "Mahasiswa",
+        'PodaHoras benar-benar mengubah cara saya belajar Aksara Batak. Interaktif dan sangat membantu!',
+      name: 'Rina S. - Pelajar',
+      title: 'Mahasiswa',
     },
     {
       quote:
-        "Sebagai budayawan, saya sangat mengapresiasi upaya PodaHoras dalam melestarikan Aksara Batak. Aplikasi yang luar biasa!",
-      name: "Bapak Togar - Budayawan",
-      title: "Pemerhati Budaya",
+        'Sebagai budayawan, saya sangat mengapresiasi upaya PodaHoras dalam melestarikan Aksara Batak. Aplikasi yang luar biasa!',
+      name: 'Bapak Togar - Budayawan',
+      title: 'Pemerhati Budaya',
     },
     {
       quote:
-        "Fitur terjemahannya sangat akurat dan cepat. Memudahkan saya dalam pekerjaan sehari-hari.",
-      name: "Dewi L. - Peneliti",
-      title: "Peneliti Bahasa",
+        'Fitur terjemahannya sangat akurat dan cepat. Memudahkan saya dalam pekerjaan sehari-hari.',
+      name: 'Dewi L. - Peneliti',
+      title: 'Peneliti Bahasa',
     },
   ];
 
   return (
     <div className="bg-background text-foreground min-h-screen">
       <Navbar />
+      <div className="flex h-64 w-full items-center justify-center bg-red-500">
+        <h2 className="text-center text-6xl font-bold">tester</h2>
+      </div>
 
       {/* Hero Section */}
       <section className="relative flex h-screen flex-col items-center justify-center overflow-hidden pt-16 text-center">
+        <div className="h-64 w-full bg-green-500">
+          <h2 className="text-center text-6xl font-bold">shiball</h2>
+        </div>
         <TexturedBackground />
         <motion.div
           initial={{ opacity: 0, y: -50 }}
@@ -285,8 +307,8 @@ function About() {
               <h3 className="mb-4 text-2xl font-bold">Visi</h3>
               <p className="text-muted-foreground text-lg">
                 Menjadi platform terdepan dalam pelestarian dan pembelajaran
-                Aksara Batak, menjadikannya relevan dan mudah diakses oleh
-                semua kalangan di era digital.
+                Aksara Batak, menjadikannya relevan dan mudah diakses oleh semua
+                kalangan di era digital.
               </p>
             </motion.div>
 
@@ -302,10 +324,16 @@ function About() {
               </div>
               <h3 className="mb-4 text-2xl font-bold">Misi</h3>
               <ul className="text-muted-foreground list-disc space-y-2 pl-5 text-lg">
-                <li>Menyediakan materi belajar yang interaktif dan komprehensif.</li>
-                <li>Mengembangkan teknologi terjemahan Aksara Batak yang akurat.</li>
+                <li>
+                  Menyediakan materi belajar yang interaktif dan komprehensif.
+                </li>
+                <li>
+                  Mengembangkan teknologi terjemahan Aksara Batak yang akurat.
+                </li>
                 <li>Membangun komunitas pembelajar yang aktif dan suportif.</li>
-                <li>Mendorong penggunaan Aksara Batak dalam kehidupan sehari-hari.</li>
+                <li>
+                  Mendorong penggunaan Aksara Batak dalam kehidupan sehari-hari.
+                </li>
               </ul>
             </motion.div>
           </div>
@@ -395,8 +423,10 @@ function About() {
               className="bg-card/50 border-border/50 flex flex-col items-center justify-center rounded-xl border p-8 text-center shadow-lg backdrop-blur-sm"
             >
               <Users size={48} className="text-primary mb-4" />
-              <h3 className="text-5xl font-bold text-primary">1000+</h3>
-              <p className="text-muted-foreground mt-2 text-lg">Pengguna Aktif</p>
+              <h3 className="text-primary text-5xl font-bold">1000+</h3>
+              <p className="text-muted-foreground mt-2 text-lg">
+                Pengguna Aktif
+              </p>
             </motion.div>
 
             <motion.div
@@ -407,8 +437,10 @@ function About() {
               className="bg-card/50 border-border/50 flex flex-col items-center justify-center rounded-xl border p-8 text-center shadow-lg backdrop-blur-sm"
             >
               <BookOpen size={48} className="text-primary mb-4" />
-              <h3 className="text-5xl font-bold text-primary">50+</h3>
-              <p className="text-muted-foreground mt-2 text-lg">Materi Pelajaran</p>
+              <h3 className="text-primary text-5xl font-bold">50+</h3>
+              <p className="text-muted-foreground mt-2 text-lg">
+                Materi Pelajaran
+              </p>
             </motion.div>
 
             <motion.div
@@ -419,8 +451,10 @@ function About() {
               className="bg-card/50 border-border/50 flex flex-col items-center justify-center rounded-xl border p-8 text-center shadow-lg backdrop-blur-sm"
             >
               <Heart size={48} className="text-primary mb-4" />
-              <h3 className="text-5xl font-bold text-primary">100%</h3>
-              <p className="text-muted-foreground mt-2 text-lg">Dedikasi Budaya</p>
+              <h3 className="text-primary text-5xl font-bold">100%</h3>
+              <p className="text-muted-foreground mt-2 text-lg">
+                Dedikasi Budaya
+              </p>
             </motion.div>
           </div>
         </div>
@@ -440,7 +474,8 @@ function About() {
               What Our Customers Are Saying
             </h2>
             <p className="text-muted-foreground mx-auto mt-4 max-w-2xl text-lg">
-              Dengar langsung dari mereka yang telah merasakan manfaat PodaHoras.
+              Dengar langsung dari mereka yang telah merasakan manfaat
+              PodaHoras.
             </p>
           </motion.div>
           <TestimonialCarousel testimonials={testimonials} />

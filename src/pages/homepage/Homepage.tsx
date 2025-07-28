@@ -134,9 +134,15 @@ function Homepage() {
   return (
     <div className="bg-background text-foreground min-h-screen">
       <Navbar />
+      <div className="flex h-64 w-full items-center justify-center bg-red-500">
+        <h2 className="text-center text-6xl font-bold">tester</h2>
+      </div>
 
       {/* Hero Section */}
       <section className="relative flex h-screen items-center justify-center overflow-hidden pt-16">
+        <div className="h-64 w-full bg-green-500">
+          <h2 className="text-center text-6xl font-bold">shiball</h2>
+        </div>
         <div className="absolute inset-0 z-0 opacity-10">
           <img
             src="/assets/logo/podahorasBlack.png"

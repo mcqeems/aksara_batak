@@ -88,9 +88,15 @@ function Translate() {
   return (
     <div className="bg-background text-foreground min-h-screen">
       <Navbar />
+      <div className="flex h-64 w-full items-center justify-center bg-red-500">
+        <h2 className="text-center text-6xl font-bold">tester</h2>
+      </div>
 
       {/* Hero Section */}
       <section className="from-background via-background/95 to-muted/20 relative overflow-hidden bg-gradient-to-br py-20">
+        <div className="h-64 w-full bg-green-500">
+          <h2 className="text-center text-6xl font-bold">shiball</h2>
+        </div>
         <div className="container mx-auto px-4">
           <motion.div
             className="space-y-6 text-center"
