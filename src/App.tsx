@@ -15,10 +15,9 @@ import Sejarah from './pages/pengenalan/sejarah/Sejarah';
 import Chat from './pages/dashboard/chat/Chat';
 import Leaderboard from './pages/dashboard/leaderboard/Leaderboard';
 import Learn from './pages/dashboard/learn/Learn';
-import Toba from './pages/dashboard/learn/toba/Toba';
-import AksaraLearn from './pages/dashboard/learn/aksara/AksaraLearn';
-// import { Contact } from 'lucide-react';
-import Contact from './pages/contact/Contact';
+import LessonDetail from './pages/dashboard/learn/LessonDetail';
+import Aksara from './pages/dashboard/aksara/Aksara';
+import ProtectedRoutes from './components/layout/ProtectedRoutes';
 
 function App() {
   return (
@@ -35,7 +34,7 @@ function App() {
       <Route path="/pengenalan/sejarah" element={<Sejarah />} />
 
       {/* Dashboard */}
-      <Route element={<ProtectedRoute />}>
+      <Route element={<ProtectedRoutes />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
