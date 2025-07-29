@@ -92,6 +92,16 @@ interface ApiResponse<T> {
 
 // --- KOMPONEN UTAMA ---
 
+function createCumulativeAdder() {
+  let currentValue = 0; // Inisialisasi nilai awal
+  const increment = 0.1; // Nilai penambahan
+
+  return function () {
+    currentValue += increment;
+    return currentValue;
+  };
+}
+
 function LessonDetail() {
   const { slug } = useParams<{ slug: string }>();
 
@@ -326,11 +336,12 @@ function LessonDetail() {
       currentPage * LEVELS_PER_PAGE,
       (currentPage + 1) * LEVELS_PER_PAGE
     );
+    const addDelay = createCumulativeAdder();
 
     return (
       <div className="w-full px-2 py-2 md:px-4 md:py-8">
         <div className="mx-auto w-full max-w-5xl">
-          <div className="bg-sidebar-border rounded-2xl border p-6">
+          <div className="bg-sidebar-border motion-preset-expand rounded-2xl border p-6">
             <h1 className="font-sora text-primary text-center text-2xl font-bold md:text-3xl">
               Pilih Level
             </h1>
@@ -348,7 +359,7 @@ function LessonDetail() {
                   }}
                   key={level.id}
                   onClick={() => !isLocked && handleStartQuiz(level.id)}
-                  className={`p-4 transition ease-linear ${
+                  className={`motion-preset-expand motion-delay-[${addDelay()}s] p-4 transition ease-linear ${
                     isLocked
                       ? 'cursor-not-allowed opacity-50'
                       : 'hover:shadow-primary cursor-pointer hover:opacity-85'
@@ -411,7 +422,7 @@ function LessonDetail() {
     if (!currentQuestion) return <LevelSelectionView />;
 
     return (
-      <div className="mt-20 flex w-full flex-col items-center justify-center p-5">
+      <div className="motion-preset-fade flex w-full flex-col items-center justify-center p-5 md:mt-20">
         <div className="mb-5 w-full max-w-4xl">
           <p className="text-center text-lg font-semibold">
             Soal {currentQuestion.current_question_index} dari{' '}
@@ -423,7 +434,7 @@ function LessonDetail() {
         <div className="w-full max-w-4xl">
           {currentQuestion.question_type === 'pilihan_ganda_aksara' && (
             <div className="mt-5 flex w-full flex-col items-center">
-              <Card className="w-full max-w-2xl">
+              <Card className="w-full">
                 <CardHeader>
                   <CardTitle className="text-center text-xl">
                     {currentQuestion.question_text}
@@ -433,7 +444,7 @@ function LessonDetail() {
                   <img
                     src={`/assets/hurufaksara/${currentQuestion.image_url}`}
                     alt="Aksara Batak"
-                    className="h-48 w-48 rounded-md md:h-64 md:w-64"
+                    className="motion-preset-pop motion-delay-100 h-48 w-48 rounded-md md:h-64 md:w-64"
                   />
                 </CardContent>
                 <div className="mr-3 flex justify-end px-3">
@@ -447,7 +458,7 @@ function LessonDetail() {
                   </Button>
                 </div>
               </Card>
-              <div className="mt-6 grid w-full max-w-2xl grid-cols-2 gap-4 md:grid-cols-4">
+              <div className="mt-6 grid w-full grid-cols-2 gap-4 md:grid-cols-4">
                 {currentQuestion.options?.map((option) => (
                   <Button
                     key={option.id}
@@ -470,15 +481,21 @@ function LessonDetail() {
 
           {currentQuestion.question_type === 'pilihan_ganda_batak' && (
             <div className="mt-5 flex w-full flex-col items-center">
-              <Card className="w-full max-w-2xl">
+              <Card className="w-full">
                 <CardHeader>
                   <CardTitle className="text-center text-xl">
                     {currentQuestion.question_text}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="flex justify-center p-4"></CardContent>
+                <CardContent className="flex justify-center p-4">
+                  <img
+                    src={`/assets/characters/${currentQuestion.image_url}`}
+                    alt="Karakter Batak"
+                    className="motion-preset-pop motion-delay-100 h-64 rounded-md md:h-81"
+                  />
+                </CardContent>
               </Card>
-              <div className="mt-6 grid w-full max-w-2xl grid-cols-2 gap-4 md:grid-cols-4">
+              <div className="mt-6 grid w-full grid-cols-2 gap-4 md:grid-cols-4">
                 {currentQuestion.options?.map((option) => (
                   <Button
                     key={option.id}
@@ -542,7 +559,9 @@ function LessonDetail() {
     const passed = score >= PASSING_SCORE;
 
     return (
-      <div className="mt-20 flex items-center justify-center">
+      <div
+        className={`mt-10 flex items-center justify-center md:mt-20 ${passed ? 'motion-preset-expand' : 'motion-preset-focus'}`}
+      >
         <Card className="w-full max-w-[750px] px-5 py-5">
           <CardHeader>
             <h2 className="mb-5 text-center text-2xl font-bold">

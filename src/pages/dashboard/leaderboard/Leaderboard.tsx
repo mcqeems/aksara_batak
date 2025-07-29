@@ -93,14 +93,14 @@ function Leaderboard() {
 
   return (
     <div className="w-full px-2 py-2 md:px-4 md:py-8">
-      <div className="motion-preset-focus motion-preset-expand mx-auto w-full max-w-5xl">
-        <div className="bg-sidebar-border rounded-2xl border p-6">
+      <div className="mx-auto w-full max-w-5xl">
+        <div className="bg-sidebar-border motion-preset-expand rounded-2xl border p-6">
           <h1 className="font-sora text-primary text-center text-3xl font-bold">
             Leaderboard
           </h1>
         </div>
 
-        <div className="bg-sidebar-accent/50 mt-6 flex items-center justify-between rounded-lg border p-4">
+        <div className="bg-sidebar-accent/50 motion-preset-expand mt-6 flex items-center justify-between rounded-lg border p-4">
           <div className="flex items-center gap-4">
             <span className="text-xl font-bold">
               {`#${currentUserRank ?? 0}`}
@@ -126,7 +126,7 @@ function Leaderboard() {
           </div>
         </div>
 
-        <div className="mt-4 w-full overflow-hidden rounded-lg border">
+        <div className="motion-preset-expand mt-4 w-full overflow-hidden rounded-lg border">
           <Table>
             <TableHeader className="bg-secondary/40 h-12 text-lg">
               <TableRow>
@@ -141,7 +141,7 @@ function Leaderboard() {
                 </TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="motion-preset-fade motion-delay-100">
+            <TableBody className="motion-preset-fade motion-delay-200">
               {leaderboardData.length > 0 ? (
                 leaderboardData.slice(0, itemsToShow).map((user) => (
                   <TableRow
@@ -185,7 +185,7 @@ function Leaderboard() {
         </div>
 
         {leaderboardData.length > 10 && (
-          <div className="mt-4 flex justify-center">
+          <div className="motion-preset-expand mt-4 flex justify-center">
             <Button variant="secondary" onClick={toggleExpanded}>
               {isExpanded ? 'Tutup' : 'Lihat Selanjutnya'}
               {isExpanded ? (

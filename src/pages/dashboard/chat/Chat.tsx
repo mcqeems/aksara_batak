@@ -60,7 +60,7 @@ const Chat: React.FC = () => {
                 }
                 return newMessages;
               });
-            }, index * 50);
+            }, index * 15);
           });
         } else {
           console.error('Invalid API response structure:', response.data);
@@ -112,7 +112,7 @@ const Chat: React.FC = () => {
             <div
               className={`max-w-lg rounded-2xl px-4 py-2 md:max-w-3xl ${
                 message.isUser
-                  ? 'dark:bg-muted-foreground/50 dark:text-primary bg-muted text-accent'
+                  ? 'dark:bg-muted-foreground/50 dark:text-primary bg-muted text-accent motion-preset-focus'
                   : 'text-primary'
               }`}
             >
@@ -141,7 +141,7 @@ const Chat: React.FC = () => {
           </div>
         ))}
       </div>
-      <div className="flex items-center border-t p-4">
+      <div className="motion-preset-expand flex items-center border-t p-4">
         <Input
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
@@ -158,6 +158,9 @@ const Chat: React.FC = () => {
           <SendHorizonal className="text-muted h-5 w-5" />
         </Button>
       </div>
+      <p className="text-muted-foreground motion-preset-fade text-center text-sm delay-200">
+        AI mungkin melakukan kesalahan, silahkan mengecek kembali jawabannya.
+      </p>
     </div>
   );
 };

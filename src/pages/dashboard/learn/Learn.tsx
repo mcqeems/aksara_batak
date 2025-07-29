@@ -49,7 +49,7 @@ function Learn() {
               <Card className="hover:shadow-primary p-5 transition ease-linear hover:opacity-85">
                 <CardContent>
                   <img
-                    className="h-full max-h-[300px] w-full max-w-[300px] self-center justify-self-center rounded-3xl"
+                    className="h-full max-h-[300px] w-full max-w-[300px] self-center justify-self-center rounded-xl md:rounded-3xl"
                     src={'/assets/lesson_icons/' + lesson.icon_url}
                     alt={lesson.title}
                   />
