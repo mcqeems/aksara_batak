@@ -207,13 +207,13 @@ function Aksara() {
   ) => (
     <div className="mt-8">
       <div className="flex items-center">
-        <div className="border-border flex-grow border-t"></div>
-        <h2 className="font-sora text-foreground/80 mx-4 shrink-0 text-center text-2xl font-bold">
+        <div className="border-border intersect:motion-preset-expand intersect-once flex-grow border-t"></div>
+        <h2 className="font-sora text-foreground/80 intersect:motion-preset-expand intersect-once mx-4 shrink-0 text-center text-2xl font-bold">
           {title}
         </h2>
-        <div className="border-border flex-grow border-t"></div>
+        <div className="border-border intersect:motion-preset-expand intersect-once flex-grow border-t"></div>
       </div>
-      <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+      <div className="intersect:motion-preset-expand intersect-once mt-4 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {data.map((item) => (
           <AksaraButton key={item.latin} {...item} />
         ))}
@@ -225,7 +225,7 @@ function Aksara() {
   return (
     <div className="w-full px-2 py-2 md:px-4 md:py-8">
       <div className="mx-auto w-full max-w-5xl">
-        <div className="bg-sidebar-border rounded-2xl border p-6">
+        <div className="bg-sidebar-border motion-preset-expand rounded-2xl border p-6">
           <h1 className="font-sora text-primary text-center text-3xl font-bold">
             Aksara Batak
           </h1>

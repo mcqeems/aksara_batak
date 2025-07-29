@@ -1,4 +1,4 @@
-// Leaderboard.tsx (Kode Final yang Diperbaiki)
+// Leaderboard.tsx (Kode Final dengan Animasi)
 
 import { useEffect, useState } from 'react';
 import api from '@/services/api';
@@ -93,7 +93,7 @@ function Leaderboard() {
 
   return (
     <div className="w-full px-2 py-2 md:px-4 md:py-8">
-      <div className="mx-auto w-full max-w-5xl">
+      <div className="motion-preset-focus motion-preset-expand mx-auto w-full max-w-5xl">
         <div className="bg-sidebar-border rounded-2xl border p-6">
           <h1 className="font-sora text-primary text-center text-3xl font-bold">
             Leaderboard
@@ -141,12 +141,12 @@ function Leaderboard() {
                 </TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="transition-transform duration-700 ease-in-out">
+            <TableBody className="motion-preset-fade motion-delay-100">
               {leaderboardData.length > 0 ? (
                 leaderboardData.slice(0, itemsToShow).map((user) => (
                   <TableRow
                     key={user.rank}
-                    className="transition-opacity duration-500 ease-in-out"
+                    className="motion-preset-fade motion-delay-75"
                   >
                     <TableCell className="text-center font-medium">
                       {user.rank}

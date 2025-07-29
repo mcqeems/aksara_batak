@@ -88,13 +88,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         // Wadah luar sekarang HANYA mengurus varian 3D-nya.
-        className={cn(buttonContainerVariants({ variant }))}
+        className={cn(buttonContainerVariants({ variant }), className)}
         disabled={props.disabled}
         ref={ref}
       >
         <Comp
           // Wajah tombol sekarang menerima semua styling: varian, ukuran, DAN className dari luar.
-          // Ini memastikan 'h-28' dan 'flex-col' Anda diterapkan di sini.
           className={cn(buttonFaceVariants({ variant, size }), className)}
           {...props}
         />

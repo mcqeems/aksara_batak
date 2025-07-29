@@ -34,14 +34,18 @@ function Learn() {
     <div className="w-full px-2 py-2 md:px-4 md:py-8">
       <div className="mx-auto w-full max-w-5xl">
         {/* Judul Halaman */}
-        <div className="bg-sidebar-border rounded-2xl border p-6">
+        <div className="bg-sidebar-border motion-preset-expand rounded-2xl border p-6">
           <h1 className="font-sora text-primary text-center text-2xl font-bold md:text-3xl">
             Apa yang ingin anda pelajari hari ini?
           </h1>
         </div>
         <div className="my-5 grid grid-cols-2 gap-5">
           {Lessons.map((lesson) => (
-            <Link to={`/learn/${slugify(lesson.title)}`} key={lesson.id}>
+            <Link
+              className="intersect:motion-preset-expand motion-delay-100"
+              to={`/learn/${slugify(lesson.title)}`}
+              key={lesson.id}
+            >
               <Card className="hover:shadow-primary p-5 transition ease-linear hover:opacity-85">
                 <CardContent>
                   <img
