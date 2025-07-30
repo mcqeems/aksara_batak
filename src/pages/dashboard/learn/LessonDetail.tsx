@@ -34,6 +34,7 @@ import EmojiSad from '@/components/icon/EmojiSad';
 import EmojiGrimacing from '@/components/icon/EmojiGrimacing';
 import Loader from '@/components/ui/loader';
 import { slugify } from '@/lib/utils';
+import ConfettiExplosion from 'react-confetti-explosion';
 
 // --- DEFINISI TIPE ---
 
@@ -491,7 +492,7 @@ function LessonDetail() {
                   <img
                     src={`/assets/characters/${currentQuestion.image_url}`}
                     alt="Karakter Batak"
-                    className="motion-preset-pop motion-delay-100 h-64 rounded-md md:h-81"
+                    className="motion-preset-pop motion-delay-100 hover:motion-preset-wobble h-64 rounded-md md:h-81"
                   />
                 </CardContent>
               </Card>
@@ -562,6 +563,14 @@ function LessonDetail() {
       <div
         className={`mt-10 flex items-center justify-center md:mt-20 ${passed ? 'motion-preset-expand' : 'motion-preset-focus'}`}
       >
+        {passed ? (
+          <ConfettiExplosion
+            force={0.6}
+            duration={2500}
+            particleCount={100}
+            width={1000}
+          />
+        ) : null}
         <Card className="w-full max-w-[750px] px-5 py-5">
           <CardHeader>
             <h2 className="mb-5 text-center text-2xl font-bold">

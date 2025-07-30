@@ -100,17 +100,17 @@ const Chat: React.FC = () => {
     <div className="flex h-[calc(100vh-4rem)] flex-col">
       <div
         ref={chatContainerRef}
-        className="flex-1 space-y-6 overflow-y-auto p-4"
+        className="mx-auto w-full max-w-4xl flex-1 space-y-6 overflow-y-auto md:p-4"
       >
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`group relative flex ${
+            className={`group relative flex items-start gap-x-3 ${
               message.isUser ? 'justify-end' : 'justify-start'
             }`}
           >
             <div
-              className={`max-w-lg rounded-2xl px-4 py-2 md:max-w-3xl ${
+              className={`max-w-xl rounded-2xl px-4 py-2 md:max-w-2xl lg:max-w-4xl ${
                 message.isUser
                   ? 'dark:bg-muted-foreground/50 dark:text-primary bg-muted text-accent motion-preset-focus'
                   : 'text-primary'
@@ -119,11 +119,11 @@ const Chat: React.FC = () => {
               {isLoading && !message.isUser && index === messages.length - 1 ? (
                 <TypingLoader />
               ) : (
-                message.text
+                <p className="break-words">{message.text}</p>
               )}
             </div>
             {!message.isUser && message.text && !isLoading && (
-              <div className="absolute bottom-[-2.15rem] left-2 flex items-center space-x-1 opacity-0 transition-opacity group-hover:opacity-100">
+              <div className="absolute -bottom-8 left-2 flex items-center space-x-1 opacity-0 transition-opacity group-hover:opacity-100">
                 <Button
                   variant="link"
                   size="icon"
@@ -141,26 +141,28 @@ const Chat: React.FC = () => {
           </div>
         ))}
       </div>
-      <div className="motion-preset-expand flex items-center border-t p-4">
-        <Input
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-          placeholder="Ketik pesan Anda..."
-          disabled={isLoading}
-          className="mr-4 flex-1 transition-opacity duration-300 disabled:opacity-50"
-        />
-        <Button
-          onClick={handleSendMessage}
-          disabled={isLoading}
-          className="transition-opacity duration-300 disabled:opacity-50"
-        >
-          <SendHorizonal className="text-muted h-5 w-5" />
-        </Button>
+      <div className="mx-auto w-full max-w-4xl border-t p-4">
+        <div className="motion-preset-expand flex items-center">
+          <Input
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+            placeholder="Ketik pesan Anda..."
+            disabled={isLoading}
+            className="mr-4 flex-1 py-5 transition-all duration-300 disabled:opacity-50"
+          />
+          <Button
+            onClick={handleSendMessage}
+            disabled={isLoading}
+            className="transition-opacity duration-300 disabled:opacity-50"
+          >
+            <SendHorizonal className="text-muted h-5 w-5" />
+          </Button>
+        </div>
+        <p className="text-muted-foreground motion-preset-fade motion-delay-100 pt-2 text-center text-xs">
+          AI mungkin melakukan kesalahan, silahkan mengecek kembali jawabannya.
+        </p>
       </div>
-      <p className="text-muted-foreground motion-preset-fade text-center text-sm delay-200">
-        AI mungkin melakukan kesalahan, silahkan mengecek kembali jawabannya.
-      </p>
     </div>
   );
 };
