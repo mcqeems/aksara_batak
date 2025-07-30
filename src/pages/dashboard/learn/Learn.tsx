@@ -1,4 +1,4 @@
-import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import { CardTitle } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api from '@/services/api';
@@ -42,20 +42,25 @@ function Learn() {
         <div className="my-5 grid grid-cols-2 gap-5">
           {Lessons.map((lesson) => (
             <Link
-              className="intersect:motion-preset-expand motion-delay-100"
               to={`/learn/${slugify(lesson.title)}`}
               key={lesson.id}
+              className="group relative block h-[300px] w-full overflow-hidden rounded-lg"
             >
-              <Card className="hover:shadow-primary p-5 transition ease-linear hover:opacity-85">
-                <CardContent>
-                  <img
-                    className="h-full max-h-[300px] w-full max-w-[300px] self-center justify-self-center rounded-xl md:rounded-3xl"
-                    src={'/assets/lesson_icons/' + lesson.icon_url}
-                    alt={lesson.title}
-                  />
-                </CardContent>
-                <CardTitle className="text-center">{lesson.title}</CardTitle>
-              </Card>
+              <div
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-300 ease-in-out group-hover:scale-105"
+                style={{
+                  backgroundImage: `url(/assets/lesson_icons/${lesson.icon_url})`,
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-black/5 transition-all duration-300 group-hover:from-black/50 group-hover:to-black/20" />
+              <div className="relative flex h-full flex-col items-center justify-end text-center">
+                <CardTitle className="w-full transform py-2 text-white transition-transform duration-300 ease-in-out group-hover:-translate-y-15">
+                  {lesson.title}
+                </CardTitle>
+                <div className="absolute -bottom-full px-4 text-white opacity-0 transition-all duration-300 ease-in-out group-hover:bottom-4 group-hover:opacity-100">
+                  <p className="text-primary text-sm">{lesson.description}</p>
+                </div>
+              </div>
             </Link>
           ))}
         </div>

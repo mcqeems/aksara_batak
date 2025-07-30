@@ -95,7 +95,7 @@ interface ApiResponse<T> {
 
 function createCumulativeAdder() {
   let currentValue = 0; // Inisialisasi nilai awal
-  const increment = 0.1; // Nilai penambahan
+  const increment = 150; // Nilai penambahan
 
   return function () {
     currentValue += increment;
@@ -360,7 +360,7 @@ function LessonDetail() {
                   }}
                   key={level.id}
                   onClick={() => !isLocked && handleStartQuiz(level.id)}
-                  className={`motion-preset-expand motion-delay-[${addDelay()}s] p-4 transition ease-linear ${
+                  className={`motion-preset-expand motion-delay-[${addDelay()}ms] p-4 transition ease-linear ${
                     isLocked
                       ? 'cursor-not-allowed opacity-50'
                       : 'hover:shadow-primary cursor-pointer hover:opacity-85'
@@ -492,7 +492,7 @@ function LessonDetail() {
                   <img
                     src={`/assets/characters/${currentQuestion.image_url}`}
                     alt="Karakter Batak"
-                    className="motion-preset-pop motion-delay-100 hover:motion-preset-wobble h-64 rounded-md md:h-81"
+                    className="motion-preset-pop motion-delay-100 h-64 rounded-md md:h-81"
                   />
                 </CardContent>
               </Card>
