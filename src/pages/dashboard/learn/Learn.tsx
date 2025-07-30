@@ -44,7 +44,7 @@ function Learn() {
             <Link
               to={`/learn/${slugify(lesson.title)}`}
               key={lesson.id}
-              className="group relative block h-[300px] w-full overflow-hidden rounded-lg"
+              className="group motion-preset-expand relative block h-[150px] w-full overflow-hidden rounded-lg md:h-[300px]"
             >
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-300 ease-in-out group-hover:scale-105"
@@ -52,7 +52,7 @@ function Learn() {
                   backgroundImage: `url(/assets/lesson_icons/${lesson.icon_url})`,
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-black/5 transition-all duration-300 group-hover:from-black/50 group-hover:to-black/20" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-black/5 transition-all duration-300 group-hover:from-black/60 group-hover:to-black/10" />
               <div className="relative flex h-full flex-col items-center justify-end text-center">
                 <CardTitle className="w-full transform py-2 text-white transition-transform duration-300 ease-in-out group-hover:-translate-y-15">
                   {lesson.title}
