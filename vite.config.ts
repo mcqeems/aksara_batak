@@ -14,4 +14,7 @@ export default defineConfig({
       canvas: path.resolve(__dirname, './src/lib/emptyModule.js'),
     },
   },
+  server: {
+    host: false,
+  },
 });
