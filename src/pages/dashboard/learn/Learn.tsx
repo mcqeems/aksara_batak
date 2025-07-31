@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api from '@/services/api';
 import { slugify } from '@/lib/utils';
+import Loader from '@/components/ui/loader';
 
 interface Lessons {
   id: number;
@@ -17,18 +18,28 @@ interface ApiResponse<T> {
 
 function Learn() {
   const [Lessons, setLessons] = useState<Lessons[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchLessons = async () => {
       try {
         const response = await api.get<ApiResponse<Lessons[]>>('v1/lessons');
         setLessons(response.data.data);
+        setIsLoading(false);
       } catch (error) {
         console.log('Gagal mengambil data: ' + error);
       }
     };
     fetchLessons();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full px-2 py-2 md:px-4 md:py-8">
