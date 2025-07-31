@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { SejarahNavbar } from '@/components/layout/SejarahNavbar';
+import { Button } from '@/components/ui/button';
 import gsap from 'gsap';
 import { Observer } from 'gsap/Observer';
 import { SplitText } from 'gsap/SplitText';
@@ -23,7 +24,6 @@ const Sejarah: React.FC = () => {
   const globalBgMusicRef = useRef<HTMLAudioElement | null>(null);
   const sectionAudioPlayersRef = useRef<(HTMLAudioElement | null)[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [userInteracted, setUserInteracted] = useState(false);
   const [currentSection, setCurrentSection] = useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
   const [isSoundMuted, setIsSoundMuted] = useState(false);
@@ -33,6 +33,38 @@ const Sejarah: React.FC = () => {
     ((index: number, direction: number) => void) | null
   >(null);
 
+  // Initialize AOS
+  useEffect(() => {
+    if (!isLoading) {
+      // Initialize AOS with proper settings
+      // AOS.init({
+      //   duration: 1000,
+      //   easing: 'ease-in-out',
+      //   once: false,
+      //   mirror: true,
+      //   offset: 50,
+      // });
+      // Refresh AOS after a delay to ensure all elements are rendered
+      // setTimeout(() => {
+      //   AOS.refresh();
+      // }, 1000);
+    }
+  }, [isLoading]);
+
+  // Refresh AOS when sections change
+  useEffect(() => {
+    if (!isLoading) {
+      const refreshAOS = () => {
+        // AOS.refresh();
+      };
+
+      // Refresh AOS after sections change with longer delay
+      const timer = setTimeout(refreshAOS, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentSection, isLoading]);
+
   // Preload all audio assets
   useEffect(() => {
     let loadedCount = 0;
@@ -40,6 +72,11 @@ const Sejarah: React.FC = () => {
     const done = () => {
       if (++loadedCount === total) setIsLoading(false);
     };
+
+    // Add timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 5000); // 5 second timeout
 
     // Global background music
     const globalAudio = new Audio(GLOBAL_BACKGROUND_MUSIC_SRC);
@@ -62,35 +99,36 @@ const Sejarah: React.FC = () => {
     });
 
     return () => {
+      clearTimeout(timeout);
       globalBgMusicRef.current?.pause();
       sectionAudioPlayersRef.current.forEach((a) => a?.pause());
     };
   }, []);
 
-  // Handle user interaction for audio autoplay
-  useEffect(() => {
-    const handleUserInteraction = () => {
-      setUserInteracted(true);
-      // Try to play background music on first interaction
-      if (globalBgMusicRef.current && globalBgMusicRef.current.paused) {
-        globalBgMusicRef.current.play().catch(() => {});
-      }
-      // Remove event listeners after first interaction
-      window.removeEventListener('click', handleUserInteraction);
-      window.removeEventListener('touchstart', handleUserInteraction);
-      window.removeEventListener('keydown', handleUserInteraction);
-    };
+  // Handle user interaction for audio autoplay - REMOVED
+  // useEffect(() => {
+  //   const handleUserInteraction = () => {
+  //     setUserInteracted(true);
+  //     // Try to play background music on first interaction
+  //     if (globalBgMusicRef.current && globalBgMusicRef.current.paused) {
+  //       globalBgMusicRef.current.play().catch(() => {});
+  //     }
+  //     // Remove event listeners after first interaction
+  //     window.removeEventListener('click', handleUserInteraction);
+  //     window.removeEventListener('touchstart', handleUserInteraction);
+  //     window.removeEventListener('keydown', handleUserInteraction);
+  //   };
 
-    window.addEventListener('click', handleUserInteraction);
-    window.addEventListener('touchstart', handleUserInteraction);
-    window.addEventListener('keydown', handleUserInteraction);
+  //   window.addEventListener('click', handleUserInteraction);
+  //   window.addEventListener('touchstart', handleUserInteraction);
+  //   window.addEventListener('keydown', handleUserInteraction);
 
-    return () => {
-      window.removeEventListener('click', handleUserInteraction);
-      window.removeEventListener('touchstart', handleUserInteraction);
-      window.removeEventListener('keydown', handleUserInteraction);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener('click', handleUserInteraction);
+  //     window.removeEventListener('touchstart', handleUserInteraction);
+  //     window.removeEventListener('keydown', handleUserInteraction);
+  //   };
+  // }, []);
 
   // Direct section navigation for auto-scroll
   const navigateToSection = useCallback(
@@ -131,7 +169,7 @@ const Sejarah: React.FC = () => {
             // Listen for audio end event
             const handleAudioEnd = () => {
               const nextSection = currentSection + 1;
-              if (nextSection < 8) {
+              if (nextSection < batakNarrationContent.length) {
                 setCurrentSection(nextSection);
                 navigateToSection(nextSection);
                 // Start next audio and continue auto-scroll
@@ -153,7 +191,7 @@ const Sejarah: React.FC = () => {
               setTimeout(() => {
                 if (isAutoScrolling) {
                   const nextSection = currentSection + 1;
-                  if (nextSection < 8) {
+                  if (nextSection < batakNarrationContent.length) {
                     setCurrentSection(nextSection);
                     navigateToSection(nextSection);
                     startAutoScroll();
@@ -168,7 +206,7 @@ const Sejarah: React.FC = () => {
             setTimeout(() => {
               if (isAutoScrolling) {
                 const nextSection = currentSection + 1;
-                if (nextSection < 8) {
+                if (nextSection < batakNarrationContent.length) {
                   setCurrentSection(nextSection);
                   navigateToSection(nextSection);
                   startAutoScroll();
@@ -254,6 +292,41 @@ const Sejarah: React.FC = () => {
   useEffect(() => {
     if (isLoading || !componentRef.current) return;
 
+    // Handle autoplay audio yang diblokir browser
+    if (globalBgMusicRef.current && globalBgMusicRef.current.paused) {
+      globalBgMusicRef.current.play().catch((error) => {
+        console.warn('Global background music autoplay was blocked:', error);
+        const playOnFirstInteraction = () => {
+          if (globalBgMusicRef.current && globalBgMusicRef.current.paused) {
+            globalBgMusicRef.current
+              .play()
+              .catch((e) =>
+                console.error('Failed to play global on interaction:', e)
+              );
+          }
+          window.removeEventListener('click', playOnFirstInteraction, true);
+          window.removeEventListener('scroll', playOnFirstInteraction, true);
+          window.removeEventListener(
+            'touchstart',
+            playOnFirstInteraction,
+            true
+          );
+        };
+        window.addEventListener('click', playOnFirstInteraction, {
+          once: true,
+          capture: true,
+        });
+        window.addEventListener('scroll', playOnFirstInteraction, {
+          once: true,
+          capture: true,
+        });
+        window.addEventListener('touchstart', playOnFirstInteraction, {
+          once: true,
+          capture: true,
+        });
+      });
+    }
+
     const container = componentRef.current;
     const sections = gsap.utils.toArray<HTMLElement>(
       '.section-item',
@@ -311,26 +384,45 @@ const Sejarah: React.FC = () => {
       gsap.set(sections, { autoAlpha: 0, zIndex: 0 });
 
       function manageAudioPlayback(newIndex: number, oldIndex: number) {
-        if (!userInteracted) return; // Only play audio after user interaction
+        // Jangan play audio section jika di section 0 (welcome)
+        const audioIndex = newIndex - 1;
 
+        // Pause semua audio section jika pindah ke section 0
+        if (newIndex === 0) {
+          sectionAudioPlayersRef.current.forEach((audio) => {
+            if (audio && !audio.paused) {
+              audio.pause();
+              audio.currentTime = 0;
+            }
+          });
+          return;
+        }
+
+        if (
+          audioIndex < 0 ||
+          audioIndex >= sectionAudioPlayersRef.current.length
+        )
+          return;
         const currentSectionAudioPlayer =
-          sectionAudioPlayersRef.current[newIndex];
+          sectionAudioPlayersRef.current[audioIndex];
+        const oldAudioIndex = oldIndex - 1;
         const oldSectionAudioPlayer =
-          oldIndex >= 0 ? sectionAudioPlayersRef.current[oldIndex] : null;
+          oldAudioIndex >= 0
+            ? sectionAudioPlayersRef.current[oldAudioIndex]
+            : null;
 
-        if (oldSectionAudioPlayer && oldIndex !== newIndex) {
+        if (oldSectionAudioPlayer && oldAudioIndex !== audioIndex) {
           oldSectionAudioPlayer.pause();
           oldSectionAudioPlayer.currentTime = 0;
         }
 
         if (currentSectionAudioPlayer) {
           currentSectionAudioPlayer.currentTime = 0;
-          currentSectionAudioPlayer.play().catch((e) => {
-            // Only log error if user has interacted
-            if (userInteracted) {
-              console.warn(`Failed to play section ${newIndex} audio:`, e);
-            }
-          });
+          currentSectionAudioPlayer
+            .play()
+            .catch((e) =>
+              console.warn(`Failed to play section ${newIndex} audio:`, e)
+            );
         }
       }
 
@@ -379,10 +471,9 @@ const Sejarah: React.FC = () => {
           const currentSection = sections[index];
           const contentAnimationStartTime = 0.4;
 
-          // Animate text content based on section
-          const textElement = currentSection.querySelector('p');
+          // Default animation for all sections (including section 0)
+          const textElement = currentSection.querySelector('p, h2');
           if (textElement) {
-            // Different animation directions for different sections
             const animationDirection = index % 2 === 0 ? -30 : 30;
             tl.fromTo(
               textElement,
@@ -409,6 +500,12 @@ const Sejarah: React.FC = () => {
             0
           );
         }
+
+        // Refresh AOS animations for the new section
+        // setTimeout(() => {
+        //   AOS.refresh();
+        // }, 1000);
+
         if (
           splitHeadings[index] &&
           splitHeadings[index]?.chars &&
@@ -502,7 +599,7 @@ const Sejarah: React.FC = () => {
         );
       };
     }
-  }, [isLoading, userInteracted]);
+  }, [isLoading]);
 
   if (isLoading) return <LoadingScreen />;
 
@@ -513,7 +610,7 @@ const Sejarah: React.FC = () => {
         onSoundToggle={handleSoundToggle}
         onSectionChange={handleSectionChange}
         currentSection={currentSection}
-        totalSections={8}
+        totalSections={batakNarrationContent.length}
         isAutoScrolling={isAutoScrolling}
         isSoundMuted={isSoundMuted}
       />
@@ -527,7 +624,7 @@ const Sejarah: React.FC = () => {
           overflow: 'hidden',
         }}
       >
-        {/* SECTION 1 */}
+        {/* SECTION 1 - Welcome */}
         <section
           id="scene-first"
           className="section-item first"
@@ -578,6 +675,12 @@ const Sejarah: React.FC = () => {
                 <p className="absolute top-20 z-50 px-2 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
                   {batakNarrationContent[0].text}
                 </p>
+                <img
+                  className="relative top-[120px] h-[700px] object-cover md:top-[120px]"
+                  src="/assets/images/ilustration/1.png"
+                  alt="Ilustrasi Aksara Batak"
+                  // data-aos="fade-right"
+                />
               </div>
             </div>
           </div>
@@ -601,6 +704,12 @@ const Sejarah: React.FC = () => {
                 <p className="absolute top-20 z-50 w-full max-w-[600px] px-2 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
                   {batakNarrationContent[1].text}
                 </p>
+                <img
+                  className="relative top-[120px] h-[700px] object-cover md:top-[120px]"
+                  src="/assets/images/ilustration/2.png"
+                  alt="Ilustrasi Jejak Awal"
+                  // data-aos="fade-left"
+                />
               </div>
             </div>
           </div>
@@ -624,6 +733,14 @@ const Sejarah: React.FC = () => {
                 <p className="absolute top-20 z-50 w-full max-w-[500px] px-2 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
                   {batakNarrationContent[2].text}
                 </p>
+                <img
+                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-25 md:h-[800px]"
+                  src="/assets/images/ilustration/3.png"
+                  alt="Ilustrasi Evolusi Lokal"
+                  // data-aos="fade-right"
+                  // data-aos-duration="1000"
+                  // data-aos-delay="400"
+                />
               </div>
             </div>
           </div>
@@ -647,6 +764,14 @@ const Sejarah: React.FC = () => {
                 <p className="absolute top-20 right-2 z-50 w-full max-w-[600px] px-2 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
                   {batakNarrationContent[3].text}
                 </p>
+                <img
+                  className="relative top-[120px] h-[650px] object-cover md:top-[120px] md:right-25 md:h-[750px]"
+                  src="/assets/images/ilustration/4.png"
+                  alt="Ilustrasi Para Datu dan Raja"
+                  // data-aos="fade-left"
+                  // data-aos-duration="1000"
+                  // data-aos-delay="400"
+                />
               </div>
             </div>
           </div>
@@ -670,6 +795,14 @@ const Sejarah: React.FC = () => {
                 <p className="absolute top-20 z-50 w-full max-w-[500px] px-2 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
                   {batakNarrationContent[4].text}
                 </p>
+                <img
+                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-25 md:h-[800px]"
+                  src="/assets/images/ilustration/5.png"
+                  alt="Ilustrasi Fungsi Magis"
+                  // data-aos="fade-right"
+                  // data-aos-duration="1000"
+                  // data-aos-delay="400"
+                />
               </div>
             </div>
           </div>
@@ -693,6 +826,14 @@ const Sejarah: React.FC = () => {
                 <p className="absolute top-20 z-50 w-full max-w-[600px] px-2 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
                   {batakNarrationContent[5].text}
                 </p>
+                <img
+                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-25 md:h-[800px]"
+                  src="/assets/images/ilustration/6.png"
+                  alt="Ilustrasi Evolusi Lokal"
+                  // data-aos="fade-right"
+                  // data-aos-duration="1000"
+                  // data-aos-delay="400"
+                />
               </div>
             </div>
           </div>
@@ -713,21 +854,286 @@ const Sejarah: React.FC = () => {
           <div className="outer">
             <div className="inner">
               <div className="bg">
+                <p className="absolute top-20 z-50 w-full max-w-[700px] px-2 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
+                  {batakNarrationContent[6].text}
+                </p>
+                <img
+                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-25 md:h-[800px]"
+                  src="/assets/images/ilustration/7.png"
+                  alt="Ilustrasi Evolusi Lokal"
+                  // data-aos="fade-right"
+                  // data-aos-duration="1000"
+                  // data-aos-delay="400"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 9 */}
+        <section
+          id="scene-ninth"
+          className="section-item ninth"
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+          }}
+        >
+          <div className="outer">
+            <div className="inner">
+              <div className="bg">
+                <p className="absolute top-20 z-50 w-full max-w-[600px] px-2 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
+                  {batakNarrationContent[7].text}
+                </p>
+                <img
+                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-25 md:h-[800px]"
+                  src="/assets/images/ilustration/8.png"
+                  alt="Ilustrasi Evolusi Lokal"
+                  // data-aos="fade-right"
+                  // data-aos-duration="1000"
+                  // data-aos-delay="400"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 10 */}
+        <section
+          id="scene-tenth"
+          className="section-item tenth"
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+          }}
+        >
+          <div className="outer">
+            <div className="inner">
+              <div className="bg">
+                <p className="absolute top-20 z-50 w-full max-w-[500px] px-2 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
+                  {batakNarrationContent[8].text}
+                </p>
+                <img
+                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-25 md:h-[800px]"
+                  src="/assets/images/ilustration/9.png"
+                  alt="Ilustrasi Evolusi Lokal"
+                  // data-aos="fade-right"
+                  // data-aos-duration="1000"
+                  // data-aos-delay="400"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 11 */}
+        <section
+          id="scene-eleventh"
+          className="section-item eleventh"
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+          }}
+        >
+          <div className="outer">
+            <div className="inner">
+              <div className="bg">
+                <p className="absolute top-20 z-50 w-full max-w-[600px] px-2 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
+                  {batakNarrationContent[9].text}
+                </p>
+                <img
+                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-25 md:h-[800px]"
+                  src="/assets/images/ilustration/10.png"
+                  alt="Ilustrasi Evolusi Lokal"
+                  // data-aos="fade-right"
+                  // data-aos-duration="1000"
+                  // data-aos-delay="400"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 12 */}
+        <section
+          id="scene-twelfth"
+          className="section-item twelfth"
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+          }}
+        >
+          <div className="outer">
+            <div className="inner">
+              <div className="bg">
+                <p className="absolute top-20 z-50 w-full max-w-[500px] px-2 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
+                  {batakNarrationContent[10].text}
+                </p>
+                <img
+                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-25 md:h-[800px]"
+                  src="/assets/images/ilustration/11.png"
+                  alt="Ilustrasi Evolusi Lokal"
+                  // data-aos="fade-right"
+                  // data-aos-duration="1000"
+                  // data-aos-delay="400"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 13 */}
+        <section
+          id="scene-thirteenth"
+          className="section-item thirteenth"
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+          }}
+        >
+          <div className="outer">
+            <div className="inner">
+              <div className="bg">
+                <p className="absolute top-20 z-50 w-full max-w-[600px] px-2 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
+                  {batakNarrationContent[11].text}
+                </p>
+                <img
+                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-25 md:h-[800px]"
+                  src="/assets/images/ilustration/12.png"
+                  alt="Ilustrasi Evolusi Lokal"
+                  // data-aos="fade-right"
+                  // data-aos-duration="1000"
+                  // data-aos-delay="400"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 14 */}
+        <section
+          id="scene-fourteenth"
+          className="section-item fourteenth"
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+          }}
+        >
+          <div className="outer">
+            <div className="inner">
+              <div className="bg">
+                <p className="absolute top-20 z-50 w-full max-w-[500px] px-2 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
+                  {batakNarrationContent[12].text}
+                </p>
+                <img
+                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-25 md:h-[800px]"
+                  src="/assets/images/ilustration/13.png"
+                  alt="Ilustrasi Evolusi Lokal"
+                  // data-aos="fade-right"
+                  // data-aos-duration="1000"
+                  // data-aos-delay="400"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 15 */}
+        <section
+          id="scene-fifteenth"
+          className="section-item fifteenth"
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+          }}
+        >
+          <div className="outer">
+            <div className="inner">
+              <div className="bg">
+                <p className="absolute top-20 z-50 w-full max-w-[600px] px-2 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
+                  {batakNarrationContent[13].text}
+                </p>
+                <img
+                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-25 md:h-[800px]"
+                  src="/assets/images/ilustration/14.png"
+                  alt="Ilustrasi Evolusi Lokal"
+                  // data-aos="fade-right"
+                  // data-aos-duration="1000"
+                  // data-aos-delay="400"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 16 - Final Section with Buttons */}
+        <section
+          id="scene-sixteenth"
+          className="section-item sixteenth"
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+          }}
+        >
+          <div className="outer">
+            <div className="inner">
+              <div className="bg">
                 <div className="absolute top-20 z-50 w-full max-w-[700px] sm:left-25">
                   <p className="px-2 text-center text-xl text-shadow-md sm:text-3xl md:px-0 md:text-left">
-                    {batakNarrationContent[6].text}
+                    {batakNarrationContent[14].text}
                   </p>
                   <div className="mt-4 flex flex-row justify-center gap-5 md:justify-start">
-                    <a href="/learn" className="w-full max-w-[130px]">
-                      <button className="w-full max-w-[130px] cursor-pointer border-2 border-white bg-transparent text-white hover:border-blue-300 hover:bg-blue-300/60">
+                    <Button
+                      asChild
+                      variant="secondary"
+                      className="w-full max-w-[130px] border-2 border-white bg-white/20 text-white hover:bg-white/30"
+                    >
+                      <a href="/learn">
                         <b>Belajar</b>
-                      </button>
-                    </a>
-                    <a href="/register" className="w-full max-w-[130px]">
-                      <button className="w-full max-w-[130px] cursor-pointer border-2 border-white bg-transparent text-white hover:border-blue-300 hover:bg-blue-300/60">
+                      </a>
+                    </Button>
+                    <Button
+                      asChild
+                      variant="secondary"
+                      className="w-full max-w-[130px] border-2 border-white bg-white/20 text-white hover:bg-white/30"
+                    >
+                      <a href="/register">
                         <b>Daftar</b>
-                      </button>
-                    </a>
+                      </a>
+                    </Button>
+
+                    <img
+                      className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-25 md:h-[800px]"
+                      src="/assets/images/ilustration/15.png"
+                      alt="Ilustrasi Evolusi Lokal"
+                      // data-aos="fade-right"
+                      // data-aos-duration="1000"
+                      // data-aos-delay="400"
+                    />
                   </div>
                 </div>
               </div>

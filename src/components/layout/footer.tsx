@@ -12,10 +12,7 @@ export function Footer() {
           <Link to="/about" className="hover:text-primary transition-colors">
             Tentang
           </Link>
-          <Link
-            to="/contact"
-            className="hover:text-primary transition-colors"
-          >
+          <Link to="/contact" className="hover:text-primary transition-colors">
             Kontak
           </Link>
           <Link

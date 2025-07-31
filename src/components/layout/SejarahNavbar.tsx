@@ -19,7 +19,7 @@ export function SejarahNavbar({
   onSoundToggle,
   onSectionChange,
   currentSection = 0,
-  totalSections = 8,
+  totalSections = 15,
   isAutoScrolling = false,
   isSoundMuted = false,
 }: SejarahNavbarProps) {
@@ -55,12 +55,20 @@ export function SejarahNavbar({
 
   const sectionTitles = [
     'Selamat Datang',
-    'Asal Usul',
-    'Media Tulis',
+    'Jejak Awal',
+    'Evolusi Lokal',
+    'Para Datu & Raja',
+    'Fungsi Magis',
+    'Varian Aksara',
+    'Pengaruh Islam',
+    'Zaman Kolonial',
+    'Dokumentasi',
+    'Menjelang Kepunahan',
+    'Kebangkitan',
+    'Era Digital',
     'Struktur Aksara',
-    'Kemunduran',
-    'Pelestarian',
-    'Ayo Ikut',
+    'Media Tradisional',
+    'Ayo Hidupkan Lagi',
   ];
 
   useEffect(() => {
@@ -200,13 +208,17 @@ export function SejarahNavbar({
       <AnimatePresence>
         {(isExpanded || isHovered) && (
           <motion.div
-            className="rounded-2xl border border-white/10 bg-black/20 p-4 shadow-2xl backdrop-blur-xl"
+            className="scrollbar-hide max-h-[60vh] overflow-y-auto rounded-2xl border border-white/10 bg-black/20 p-4 shadow-2xl backdrop-blur-xl"
             initial={{ opacity: 0, y: -20, scale: 0.9, height: 0 }}
             animate={{ opacity: 1, y: 0, scale: 1, height: 'auto' }}
             exit={{ opacity: 0, y: -20, scale: 0.9, height: 0 }}
             transition={{
               duration: 0.4,
               ease: [0.25, 0.46, 0.45, 0.94],
+            }}
+            style={{
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
             }}
           >
             <motion.div

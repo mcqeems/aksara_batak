@@ -1,6 +1,6 @@
+import React from 'react';
 import Lottie from 'lottie-react';
-
-import grimacing from '../../../public/assets/json-lottie/grimacing.json';
+import grimacing from '/assets/json-lottie/grimacing.json?url';
 
 function EmojiGrimacing() {
   return (
