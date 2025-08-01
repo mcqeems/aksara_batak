@@ -45,6 +45,12 @@ export function Navbar() {
           Translate
         </Link>
         <Link
+          to="/chatbot"
+          className="text-muted-foreground hover:text-foreground transition-colors"
+        >
+          Chatbot
+        </Link>
+        <Link
           to="/pengenalan"
           className="text-muted-foreground hover:text-foreground transition-colors"
         >
@@ -85,6 +91,12 @@ export function Navbar() {
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 Translate
+              </Link>
+              <Link
+                to="/chatbot"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Chatbot
               </Link>
               <Link
                 to="/pengenalan"

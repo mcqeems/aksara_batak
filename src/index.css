@@ -117,6 +117,26 @@
   --sidebar-ring: #ecbb88; /* Darker Duolingo Green for sidebar focus ring */
 }
 
+/* ini untuk writing vertical di welcome card */
+@layer components {
+  .writing-vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
+
+  .writing-vertical-simple {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+  }
+
+  .writing-vertical-clean {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    letter-spacing: 0.1em;
+  }
+}
+
 @layer components {
   button {
     @apply font-sora font-bold;

@@ -9,9 +9,6 @@ export function Footer() {
           Dilindungi.
         </p>
         <div className="mt-4 flex gap-4 md:mt-0">
-          <Link to="/about" className="hover:text-primary transition-colors">
-            Tentang
-          </Link>
           <Link to="/contact" className="hover:text-primary transition-colors">
             Kontak
           </Link>

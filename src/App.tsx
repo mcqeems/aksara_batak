@@ -18,6 +18,7 @@ import Learn from './pages/dashboard/learn/Learn';
 import LessonDetail from './pages/dashboard/learn/LessonDetail';
 import ProtectedRoute from './components/layout/ProtectedRoutes';
 import Aksara from './pages/dashboard/aksara/Aksara';
+import ChatBot from './pages/chatbot/Chatbot';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/mulai" element={<Mulai />} />
+      <Route path="/chatbot" element={<ChatBot />} />
       <Route path="/pengenalan" element={<Pengenalan />} />
       <Route path="/pengenalan/penjelasan" element={<Penjelasan />} />
       <Route path="/pengenalan/sejarah" element={<Sejarah />} />
