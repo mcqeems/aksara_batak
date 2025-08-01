@@ -50,14 +50,15 @@ export function WelcomeCard({
           <div className="h-24 w-0.5 bg-white/80" />
 
           {/* Card with Hole */}
-          <div className="relative rounded-2xl border border-white/10 bg-black/20 p-6 pt-8 shadow-2xl backdrop-blur-xl">
+          <div className="relative rounded-2xl border border-white/10 bg-black/15 p-4 pt-10 shadow-2xl backdrop-blur-md">
             {/* Hole */}
-            <div className="absolute top-3 left-1/2 h-4 w-4 -translate-x-1/2 rounded-full bg-gray-900/70 ring-2 ring-gray-400/50" />
+            <div className="absolute top-3 left-1/2 aspect-square h-3.5 -translate-x-1/2 rounded-full bg-gray-900/90 shadow-inner ring-2 ring-gray-400/70" />
 
             {/* Card Content */}
-            <div className="font-bawor -rotate-180 text-center text-4xl leading-tight font-bold text-white drop-shadow-lg md:text-5xl">
-              <div className="writing-vertical">{text1}</div>
-              <div className="writing-vertical">{text2}</div>
+            <div className="font-bawor h-auto w-auto -rotate-90 text-center text-3xl leading-tight font-semibold text-white drop-shadow-lg md:text-5xl">
+              <div className="writing-vertical rotate-90 whitespace-nowrap">
+                {text1} {text2}
+              </div>
             </div>
           </div>
         </div>
