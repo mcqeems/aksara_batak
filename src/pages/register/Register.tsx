@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../services/api';
+import { Navbar } from '@/components/layout/navbar';
 
 // Import komponen shadcn/ui
 import { Button } from '@/components/ui/button';
@@ -32,61 +33,65 @@ const Register = () => {
   };
 
   return (
-    <div className="bg-background flex min-h-screen items-center justify-center">
-      <Card className="w-full max-w-sm">
-        <form onSubmit={handleSubmit}>
-          <CardHeader>
-            <CardTitle className="text-2xl">Register</CardTitle>
-            <CardDescription>Buat akun baru untuk memulai.</CardDescription>
-          </CardHeader>
-          <CardContent className="mt-5 grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="name">Nama</Label>
-              <Input
-                id="name"
-                type="text"
-                placeholder="Nama Lengkap"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="email@contoh.com"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </CardContent>
-          <CardFooter className="mt-5 flex flex-col">
-            <Button type="submit" className="w-full">
-              Buat Akun
-            </Button>
-            <p className="text-muted-foreground mt-4 text-center text-xs">
-              Sudah punya akun?{' '}
-              <Link to="/login" className="underline">
-                Login
-              </Link>
-            </p>
-          </CardFooter>
-        </form>
-      </Card>
-    </div>
+    <>
+      <Navbar />
+
+      <div className="bg-background flex min-h-screen items-center justify-center">
+        <Card className="w-full max-w-sm">
+          <form onSubmit={handleSubmit}>
+            <CardHeader>
+              <CardTitle className="text-2xl">Register</CardTitle>
+              <CardDescription>Buat akun baru untuk memulai.</CardDescription>
+            </CardHeader>
+            <CardContent className="mt-5 grid gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="name">Nama</Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Nama Lengkap"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="email@contoh.com"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+            </CardContent>
+            <CardFooter className="mt-5 flex flex-col">
+              <Button type="submit" className="w-full">
+                Buat Akun
+              </Button>
+              <p className="text-muted-foreground mt-4 text-center text-xs">
+                Sudah punya akun?{' '}
+                <Link to="/login" className="underline">
+                  Login
+                </Link>
+              </p>
+            </CardFooter>
+          </form>
+        </Card>
+      </div>
+    </>
   );
 };
 

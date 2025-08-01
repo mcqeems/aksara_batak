@@ -89,6 +89,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         // Wadah luar sekarang HANYA mengurus varian 3D-nya.
         className={cn(buttonContainerVariants({ variant }), className)}
+        {...props}
         disabled={props.disabled}
         ref={ref}
       >

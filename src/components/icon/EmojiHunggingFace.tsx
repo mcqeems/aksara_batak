@@ -1,6 +1,6 @@
-import Lottie from 'lottie-react';
 import React from 'react';
-import huggingFace from '../../../public/assets/json-lottie/hug-face.json';
+import Lottie from 'lottie-react';
+import huggingFace from '../../assets/json-lottie/hug-face.json';
 
 interface EmojiHuggingFaceProps {
   className?: string;

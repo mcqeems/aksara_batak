@@ -16,8 +16,8 @@ import Chat from './pages/dashboard/chat/Chat';
 import Leaderboard from './pages/dashboard/leaderboard/Leaderboard';
 import Learn from './pages/dashboard/learn/Learn';
 import LessonDetail from './pages/dashboard/learn/LessonDetail';
-import ProtectedRoute from './components/layout/ProtectedRoutes';
 import Aksara from './pages/dashboard/aksara/Aksara';
+import ProtectedRoutes from './components/layout/ProtectedRoutes';
 
 function App() {
   return (
@@ -34,7 +34,7 @@ function App() {
       <Route path="/pengenalan/sejarah" element={<Sejarah />} />
 
       {/* Dashboard */}
-      <Route element={<ProtectedRoute />}>
+      <Route element={<ProtectedRoutes />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/leaderboard" element={<Leaderboard />} />

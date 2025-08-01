@@ -50,13 +50,13 @@
 :root {
   --radius: 0.625rem;
   --background: #fff; /* Light background */
-  --foreground: #222222; /* Dark text */
+  --foreground: #212121; /* Dark text */
   --card: #fff; /* White card */
-  --card-foreground: #222222; /* Dark text on card */
+  --card-foreground: #212121; /* Dark text on card */
   --popover: #fff; /* White popover */
-  --popover-foreground: #222222; /* Dark text on popover */
+  --popover-foreground: #212121; /* Dark text on popover */
   --primary: #997856; /* Duolingo Green */
-  --primary-foreground: #222222; /* White text on primary */
+  --primary-foreground: #212121; /* White text on primary */
   --secondary: #e4e4e7; /* Duolingo Purple */
   --secondary-foreground: #fff; /* White text on secondary */
   --muted: #e6e6e6; /* Light grey muted */
@@ -84,16 +84,16 @@
 }
 
 .dark {
-  --background: #222222; /* Dark background */
+  --background: #212121; /* Dark background */
   --foreground: #fff; /* Light text */
   --card: #323232; /* Darker card */
   --card-foreground: #fff; /* Light text on card */
   --popover: #323232; /* Darker popover */
   --popover-foreground: #fff; /* Light text on popover */
   --primary: #ecbb88; /* Darker Duolingo Green */
-  --primary-foreground: #222222; /* Dark text on primary */
+  --primary-foreground: #212121; /* Dark text on primary */
   --secondary: #9c9c9c; /* Darker Duolingo Purple */
-  --secondary-foreground: #222222; /* Light text on secondary */
+  --secondary-foreground: #212121; /* Light text on secondary */
   --muted: #404040; /* Darker grey muted */
   --muted-foreground: #999999; /* Medium light grey muted text */
   --accent: #696969; /* Darker Duolingo Blue */
@@ -110,25 +110,176 @@
   --sidebar: #333333; /* Darker sidebar */
   --sidebar-foreground: #fff; /* Light text on sidebar */
   --sidebar-primary: #ecbb88; /* Darker Duolingo Green */
-  --sidebar-primary-foreground: #222222; /* Dark text on sidebar primary */
+  --sidebar-primary-foreground: #212121; /* Dark text on sidebar primary */
   --sidebar-accent: #696969; /* Darker Duolingo Blue */
   --sidebar-accent-foreground: #fff; /* Light text on sidebar accent */
   --sidebar-border: #404040; /* Darker grey sidebar border */
   --sidebar-ring: #ecbb88; /* Darker Duolingo Green for sidebar focus ring */
 }
 
+/* ini untuk writing vertical di welcome card */
 @layer components {
   button {
-    @apply font-sora font-bold;
+    @apply font-inter font-bold;
   }
-}
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
+  .writing-vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
   }
-  body {
-    @apply bg-background text-foreground font-inter;
+
+  .writing-vertical-simple {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+  }
+
+  .writing-vertical-clean {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    letter-spacing: 0.1em;
+  }
+
+  /* Cursor styling untuk input dan textarea */
+  input,
+  textarea {
+    caret-color: var(--primary);
+    caret-shape: block;
+  }
+
+  /* Cursor untuk elemen yang bisa di-edit */
+  [contenteditable='true'] {
+    caret-color: var(--primary);
+    caret-shape: block;
+  }
+
+  /* Cursor untuk link dan elemen yang bisa diklik */
+  a,
+  button,
+  [role='button'],
+  [tabindex] {
+    cursor: pointer;
+  }
+
+  /* Cursor untuk elemen yang bisa di-resize */
+  .resizable {
+    cursor: se-resize;
+  }
+
+  /* Cursor untuk text selection */
+  ::selection {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  /* Cursor untuk text yang bisa di-edit */
+  .editable-text {
+    cursor: text;
+    caret-color: var(--primary);
+  }
+
+  /* Utility classes untuk cursor */
+  .cursor-text {
+    cursor: text;
+  }
+
+  .cursor-pointer {
+    cursor: pointer;
+  }
+
+  .cursor-default {
+    cursor: default;
+  }
+
+  .cursor-not-allowed {
+    cursor: not-allowed;
+  }
+
+  .cursor-grab {
+    cursor: grab;
+  }
+
+  .cursor-grabbing {
+    cursor: grabbing;
+  }
+
+  .cursor-zoom-in {
+    cursor: zoom-in;
+  }
+
+  .cursor-zoom-out {
+    cursor: zoom-out;
+  }
+
+  /* Caret styling */
+  .caret-primary {
+    caret-color: var(--primary);
+  }
+
+  .caret-foreground {
+    caret-color: var(--foreground);
+  }
+
+  .caret-transparent {
+    caret-color: transparent;
+  }
+
+  /* Override motion plugin untuk text selection */
+  .motion-preset-expand,
+  .motion-preset-fade,
+  .motion-preset-focus,
+  .motion-preset-pop,
+  .intersect\:motion-preset-expand,
+  .intersect\:motion-preset-fade,
+  .intersect\:motion-preset-focus,
+  .intersect\:motion-preset-pop {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+  }
+
+  /* Memastikan text bisa di-select di semua elemen */
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  span,
+  div,
+  li,
+  td,
+  th {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+  }
+
+  /* Khusus untuk elemen yang tidak boleh di-select */
+  .no-select {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+  }
+
+  /* Memastikan text selection berfungsi di motion elements */
+  [class*='motion-preset'] {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+  }
+
+  /* Memastikan text selection berfungsi di intersect elements */
+  [class*='intersect:'] {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
   }
 }
 
@@ -143,6 +294,50 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground font-inter bg-background;
+    cursor: auto;
+    user-select: auto;
   }
+}
+
+/* Override khusus untuk motion plugin - harus di luar layer */
+.motion-preset-expand,
+.motion-preset-fade,
+.motion-preset-focus,
+.motion-preset-pop,
+.intersect\:motion-preset-expand,
+.intersect\:motion-preset-fade,
+.intersect\:motion-preset-focus,
+.intersect\:motion-preset-pop {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+}
+
+/* Memastikan semua text bisa di-select */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+div,
+li,
+td,
+th {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+}
+
+/* Khusus untuk elemen yang tidak boleh di-select */
+.no-select {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
 }
