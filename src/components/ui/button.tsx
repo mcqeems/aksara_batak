@@ -16,13 +16,8 @@ const buttonContainerVariants = cva(
           'bg-destructive/70 active:bg-destructive/60 pb-[4px] active:pb-0 active:translate-y-[4px] cursor-pointer',
         secondary:
           'bg-secondary/70 active:bg-secondary/60 pb-[4px] active:pb-0 active:translate-y-[4px] cursor-pointer',
-        link: '',
-        'circle-default':
-          'rounded-full bg-primary/70 active:bg-primary/60 pb-[4px] active:pb-0 active:translate-y-[4px] cursor-pointer',
-        'circle-destructive':
-          'rounded-full bg-destructive/70 active:bg-destructive/60 pb-[4px] active:pb-0 active:translate-y-[4px] cursor-pointer',
-        'circle-secondary':
-          'rounded-full bg-secondary/70 active:bg-secondary/60 pb-[4px] active:pb-0 active:translate-y-[4px] cursor-pointer',
+        link: '', // Tidak ada efek 3D untuk varian link
+        ghost: '', // Tidak ada efek 3D untuk varian ghost
       },
     },
     defaultVariants: {
@@ -43,19 +38,15 @@ const buttonFaceVariants = cva(
           'bg-destructive text-primary-foreground hover:bg-destructive/90 cursor-pointer',
         secondary:
           'bg-secondary text-primary-foreground hover:bg-secondary/80 cursor-pointer',
-        link: 'bg-transparent underline-offset-4 hover:underline text-primary cursor-pointer  transition-all ease-in-out hover:text-primary/75',
-        'circle-default':
-          'rounded-full bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer',
-        'circle-destructive':
-          'rounded-full bg-destructive text-primary-foreground hover:bg-destructive/90 cursor-pointer',
-        'circle-secondary':
-          'rounded-full bg-secondary text-primary-foreground hover:bg-secondary/80 cursor-pointer',
+        link: 'bg-transparent underline-offset-4 hover:underline text-primary cursor-pointer',
+        ghost: 'hover:bg-accent hover:text-accent-foreground',
       },
       size: {
         default: 'h-10 px-4 py-2',
         sm: 'h-9 rounded-md px-3',
         lg: 'h-11 rounded-md px-8',
         icon: 'h-10 w-10',
+        ghost: 'h-10 w-10',
       },
     },
     defaultVariants: {

@@ -83,6 +83,27 @@
   --sidebar-ring: #ecbb88; /* Duolingo Green for sidebar focus ring */
 }
 
+/* Vertical writing style for Batak text */
+.writing-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  line-height: 1.2;
+}
+
+/* Carousel animation */
+@keyframes carousel-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.carousel-scroll {
+  animation: carousel-scroll 20s linear infinite;
+}
+
 .dark {
   --background: #222222; /* Dark background */
   --foreground: #fff; /* Light text */
