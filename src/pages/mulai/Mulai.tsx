@@ -194,7 +194,7 @@ function Mulai() {
     return (
       <div>
         <Navbar />
-        <div className="flex min-h-screen flex-col items-center justify-center gap-5 p-5 text-center">
+        <div className="bg-background flex min-h-screen flex-col items-center justify-center gap-5 p-5 text-center">
           <img
             src="/public/assets/logo/podahorasOriginal.svg"
             alt="PodaHoras Logo"
@@ -233,7 +233,7 @@ function Mulai() {
     return (
       <div>
         <Navbar />
-        <div className="mt-20 flex items-center justify-center">
+        <div className="bg-background mt-20 flex items-center justify-center">
           <Card className="px-5 py-5">
             <CardHeader>
               {' '}
@@ -289,7 +289,7 @@ function Mulai() {
 
   // --- KONDISI 4: TAMPILAN KUIS SEDANG BERJALAN ---
   return (
-    <div>
+    <div className="">
       <Navbar />
       <div className="mt-20 flex w-full flex-col items-center justify-center p-5">
         <div className="mb-5 w-full max-w-4xl">

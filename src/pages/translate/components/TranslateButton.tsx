@@ -26,7 +26,7 @@ export function TranslateButton({
         size="lg"
         onClick={onTranslate}
         disabled={disabled}
-        className="h-11 px-6 text-base font-semibold"
+        className="text-base font-semibold"
       >
         <Languages className="mr-2 h-4 w-4" />
         Terjemahkan Sekarang

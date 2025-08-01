@@ -64,7 +64,7 @@ export function HeroContent() {
         <Link to="/mulai">
           <Button
             size="lg"
-            className="group relative w-full overflow-hidden px-8 py-3 text-base font-semibold sm:w-auto"
+            className="group relative w-full overflow-hidden text-base font-semibold sm:w-auto"
           >
             <span className="relative z-10">Mulai Sekarang</span>
             <motion.div
@@ -79,7 +79,7 @@ export function HeroContent() {
           <Button
             variant="secondary"
             size="lg"
-            className="group relative w-full overflow-hidden px-8 py-3 text-base font-semibold sm:w-auto"
+            className="group relative w-full overflow-hidden text-base font-semibold sm:w-auto"
           >
             <span className="relative z-10">Pelajari Dasar</span>
             <motion.div

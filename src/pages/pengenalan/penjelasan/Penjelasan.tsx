@@ -5,6 +5,7 @@ import { Observer } from 'gsap/Observer';
 import { SplitText } from 'gsap/SplitText';
 import './penjelasan.css';
 import { batakPenjelasanContent } from './penjelasanData';
+import Loader from '@/components/ui/loader';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(Observer, SplitText);
@@ -14,7 +15,7 @@ const GLOBAL_BACKGROUND_MUSIC_SRC = '/assets/sounds/BgMusic.mp3';
 
 const LoadingScreen: React.FC = () => (
   <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#12151e] text-2xl text-white">
-    Loading...
+    <Loader />
   </div>
 );
 

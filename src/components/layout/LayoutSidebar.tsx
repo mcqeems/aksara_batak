@@ -17,7 +17,7 @@ export default function LayoutSidebar({
           <SidebarTrigger />
         </div>
         {/* Konten halaman sekarang akan memiliki ruang yang benar */}
-        <div className="h-full w-full overflow-y-auto p-4 pt-16 sm:p-6">
+        <div className="bg-background h-full w-full overflow-y-auto p-4 pt-16 sm:p-6">
           {children}
         </div>
       </main>

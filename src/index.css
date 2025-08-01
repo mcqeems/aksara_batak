@@ -50,13 +50,13 @@
 :root {
   --radius: 0.625rem;
   --background: #fff; /* Light background */
-  --foreground: #222222; /* Dark text */
+  --foreground: #212121; /* Dark text */
   --card: #fff; /* White card */
-  --card-foreground: #222222; /* Dark text on card */
+  --card-foreground: #212121; /* Dark text on card */
   --popover: #fff; /* White popover */
-  --popover-foreground: #222222; /* Dark text on popover */
+  --popover-foreground: #212121; /* Dark text on popover */
   --primary: #997856; /* Duolingo Green */
-  --primary-foreground: #222222; /* White text on primary */
+  --primary-foreground: #212121; /* White text on primary */
   --secondary: #e4e4e7; /* Duolingo Purple */
   --secondary-foreground: #fff; /* White text on secondary */
   --muted: #e6e6e6; /* Light grey muted */
@@ -84,16 +84,16 @@
 }
 
 .dark {
-  --background: #222222; /* Dark background */
+  --background: #212121; /* Dark background */
   --foreground: #fff; /* Light text */
   --card: #323232; /* Darker card */
   --card-foreground: #fff; /* Light text on card */
   --popover: #323232; /* Darker popover */
   --popover-foreground: #fff; /* Light text on popover */
   --primary: #ecbb88; /* Darker Duolingo Green */
-  --primary-foreground: #222222; /* Dark text on primary */
+  --primary-foreground: #212121; /* Dark text on primary */
   --secondary: #9c9c9c; /* Darker Duolingo Purple */
-  --secondary-foreground: #222222; /* Light text on secondary */
+  --secondary-foreground: #212121; /* Light text on secondary */
   --muted: #404040; /* Darker grey muted */
   --muted-foreground: #999999; /* Medium light grey muted text */
   --accent: #696969; /* Darker Duolingo Blue */
@@ -110,7 +110,7 @@
   --sidebar: #333333; /* Darker sidebar */
   --sidebar-foreground: #fff; /* Light text on sidebar */
   --sidebar-primary: #ecbb88; /* Darker Duolingo Green */
-  --sidebar-primary-foreground: #222222; /* Dark text on sidebar primary */
+  --sidebar-primary-foreground: #212121; /* Dark text on sidebar primary */
   --sidebar-accent: #696969; /* Darker Duolingo Blue */
   --sidebar-accent-foreground: #fff; /* Light text on sidebar accent */
   --sidebar-border: #404040; /* Darker grey sidebar border */
@@ -120,15 +120,6 @@
 @layer components {
   button {
     @apply font-sora font-bold;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground font-inter;
   }
 }
 
@@ -143,6 +134,6 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground font-inter bg-background;
   }
 }
