@@ -194,7 +194,7 @@ function Mulai() {
     return (
       <div>
         <Navbar />
-        <div className="flex min-h-screen flex-col items-center justify-center gap-5 p-5 text-center">
+        <div className="motion-preset-fade flex min-h-screen flex-col items-center justify-center gap-5 p-5 text-center">
           <img
             src="/public/assets/logo/podahorasOriginal.svg"
             alt="PodaHoras Logo"
@@ -233,7 +233,7 @@ function Mulai() {
     return (
       <div>
         <Navbar />
-        <div className="mt-20 flex items-center justify-center">
+        <div className="motion-preset-focus mt-20 flex items-center justify-center">
           <Card className="px-5 py-5">
             <CardHeader>
               {' '}
@@ -291,8 +291,8 @@ function Mulai() {
   return (
     <div>
       <Navbar />
-      <div className="mt-20 flex w-full flex-col items-center justify-center p-5">
-        <div className="mb-5 w-full max-w-4xl">
+      <div className="motion-preset-expand mt-20 flex w-full flex-col items-center justify-center p-5">
+        <div className="motion-preset-fade mb-5 w-full max-w-4xl">
           <p className="text-center text-lg font-semibold">
             {' '}
             Soal {currentQuestionIndex + 1} dari {quizData.length}{' '}
