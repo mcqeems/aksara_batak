@@ -1,6 +1,6 @@
 import React from 'react';
 import Lottie from 'lottie-react';
-import sad from '/assets/json-lottie/happy-cry.json?url';
+import sad from '../../assets/json-lottie/happy-cry.json';
 
 function EmojiSad() {
   return (
