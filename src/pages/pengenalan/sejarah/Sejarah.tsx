@@ -605,7 +605,7 @@ const Sejarah: React.FC = () => {
   if (isLoading) return <LoadingScreen />;
 
   return (
-    <div className="bg-background text-foreground min-h-screen overflow-x-hidden">
+    <div className="sejarah-page bg-background text-foreground min-h-screen overflow-x-hidden">
       <SejarahNavbar
         onAutoScrollToggle={handleAutoScrollToggle}
         onSoundToggle={handleSoundToggle}

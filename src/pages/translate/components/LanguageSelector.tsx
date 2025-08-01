@@ -26,14 +26,14 @@ export function LanguageSelector({
   return (
     <div className="mb-4">
       <motion.div
-        className="flex items-center justify-center gap-6"
+        className="flex flex-col items-center justify-between gap-2 md:flex-row"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
       >
-        <div className="flex-1">
+        <div className="w-full md:w-auto">
           <Select value={sourceLang} onValueChange={onSourceLangChange}>
-            <SelectTrigger className="h-12 text-sm">
+            <SelectTrigger className="h-12 w-full text-sm md:w-auto">
               <SelectValue placeholder="Pilih Bahasa Sumber" />
             </SelectTrigger>
             <SelectContent>
@@ -57,9 +57,9 @@ export function LanguageSelector({
           <ArrowRightLeft className="h-5 w-5 text-white" />
         </motion.button>
 
-        <div className="flex-1">
+        <div className="w-full md:w-auto">
           <Select value={targetLang} onValueChange={onTargetLangChange}>
-            <SelectTrigger className="h-12 text-sm">
+            <SelectTrigger className="h-12 w-full text-sm md:w-auto">
               <SelectValue placeholder="Pilih Bahasa Target" />
             </SelectTrigger>
             <SelectContent>

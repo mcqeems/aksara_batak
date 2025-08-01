@@ -508,7 +508,7 @@ const Penjelasan: React.FC = () => {
   if (isLoading) return <LoadingScreen />;
 
   return (
-    <div className="bg-background text-foreground min-h-screen overflow-x-hidden">
+    <div className="penjelasan-page bg-background text-foreground min-h-screen overflow-x-hidden">
       <SejarahNavbar
         onAutoScrollToggle={handleAutoScrollToggle}
         onSoundToggle={handleSoundToggle}

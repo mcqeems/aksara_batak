@@ -1,12 +1,42 @@
 import { Navbar } from '@/components/layout/navbar';
-import React from 'react';
+import { Footer } from '@/components/layout/footer';
+import {
+  AboutHero,
+  VisionMissionSection,
+  StoryTargetSection,
+  MeetOurExpertsSection,
+  TestimonialSection,
+  CallToActionSection,
+} from './components';
 
 function About() {
   return (
-    <>
+    <div className="bg-background text-foreground min-h-screen">
       <Navbar />
-      <div>Translate</div>
-    </>
+
+      {/* Hero Section */}
+      <AboutHero />
+
+      {/* Vision & Mission Section */}
+      <VisionMissionSection />
+
+      {/* Story & Target Section */}
+      <StoryTargetSection />
+
+      {/* Impact Section */}
+      {/* <ImpactSection /> */}
+
+      {/* Testimonial Section */}
+      <TestimonialSection />
+
+      {/* Meet Our Experts Section */}
+      <MeetOurExpertsSection />
+
+      {/* Call to Action Section */}
+      <CallToActionSection />
+
+      <Footer />
+    </div>
   );
 }
 
