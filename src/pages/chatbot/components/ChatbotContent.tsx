@@ -15,12 +15,12 @@ import {
   History,
 } from 'lucide-react';
 import TypingLoader from '@/components/ui/loader/TypingLoader';
+import api from '@/services/api';
 
 interface Message {
   id: string;
   text: string;
   isUser: boolean;
-  timestamp: Date;
 }
 
 export function ChatbotContent() {
@@ -29,7 +29,6 @@ export function ChatbotContent() {
       id: '1',
       text: 'Halo! Saya adalah AI asisten yang siap membantu Anda belajar tentang Aksara Batak. Apa yang ingin Anda tanyakan?',
       isUser: false,
-      timestamp: new Date(),
     },
   ]);
   const [inputValue, setInputValue] = useState<string>('');
@@ -45,47 +44,56 @@ export function ChatbotContent() {
   };
 
   const handleSendMessage = async () => {
-    if (inputValue.trim() && !isLoading) {
+    const trimmedInput = inputValue.trim();
+    if (trimmedInput && !isLoading) {
       const userMessage: Message = {
         id: Date.now().toString(),
-        text: inputValue,
+        text: trimmedInput,
         isUser: true,
-        timestamp: new Date(),
       };
       setMessages((prev) => [...prev, userMessage]);
       setInputValue('');
       setIsLoading(true);
 
       // Add AI response placeholder
-      const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
+      const aiMessageId = (Date.now() + 1).toString();
+      const aiMessagePlaceholder: Message = {
+        id: aiMessageId,
         text: '',
         isUser: false,
-        timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, aiMessage]);
+      setMessages((prev) => [...prev, aiMessagePlaceholder]);
 
-      // Simulate AI response (replace with actual API call)
-      setTimeout(() => {
-        const responses = [
-          'Terima kasih atas pertanyaannya! Saya akan membantu Anda memahami Aksara Batak dengan lebih baik.',
-          'Pertanyaan yang sangat menarik! Mari kita bahas bersama tentang Aksara Batak.',
-          'Saya senang Anda tertarik dengan Aksara Batak. Berikut adalah penjelasannya...',
-          'Aksara Batak adalah sistem tulisan tradisional yang sangat menarik untuk dipelajari.',
-          'Mari kita eksplorasi lebih dalam tentang budaya dan sejarah Aksara Batak.',
-        ];
-        const randomResponse =
-          responses[Math.floor(Math.random() * responses.length)];
-
-        setMessages((prev) => {
-          const newMessages = [...prev];
-          if (newMessages.length > 0) {
-            newMessages[newMessages.length - 1].text = randomResponse;
-          }
-          return newMessages;
+      try {
+        const response = await api.post('v1/chat/public', {
+          message: trimmedInput,
         });
+
+        // You might need to adjust `response.data.text` based on your API's response structure.
+        const aiResponseText =
+          response.data.data.reply ||
+          'Maaf, saya tidak dapat memproses permintaan Anda saat ini.';
+
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === aiMessageId ? { ...msg, text: aiResponseText } : msg
+          )
+        );
+      } catch (error) {
+        console.error('Gagal mengambil data dari AI:', error);
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === aiMessageId
+              ? {
+                  ...msg,
+                  text: 'Maaf, terjadi kesalahan saat menghubungi AI. Silakan coba lagi.',
+                }
+              : msg
+          )
+        );
+      } finally {
         setIsLoading(false);
-      }, 2000);
+      }
     }
   };
 
@@ -102,13 +110,6 @@ export function ChatbotContent() {
         chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
-
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('id-ID', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
 
   return (
     <motion.div
@@ -142,8 +143,11 @@ export function ChatbotContent() {
       </div>
 
       {/* Chat Container */}
-      <div className="bg-muted/20 mb-4 h-96 overflow-y-auto rounded-lg border p-4">
-        <div ref={chatContainerRef} className="space-y-4">
+      <div
+        ref={chatContainerRef}
+        className="bg-muted/20 mb-4 h-96 overflow-y-auto rounded-lg border p-4"
+      >
+        <div className="space-y-4">
           {messages.map((message, index) => (
             <motion.div
               key={message.id}
@@ -182,7 +186,6 @@ export function ChatbotContent() {
                     message.isUser ? 'justify-end' : 'justify-start'
                   }`}
                 >
-                  <span>{formatTime(message.timestamp)}</span>
                   {!message.isUser && message.text && !isLoading && (
                     <Button
                       variant="link"
