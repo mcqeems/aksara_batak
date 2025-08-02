@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { useState, useEffect, useRef } from 'react';
 
 interface TranslationInputProps {
   inputText: string;
@@ -18,6 +19,34 @@ export function TranslationInput({
   inputText,
   onInputChange,
 }: TranslationInputProps) {
+  const [value, setValue] = useState(inputText);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    setValue(inputText);
+  }, [inputText]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = e.target.value;
+    setValue(newValue);
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      onInputChange(newValue);
+    }, 350);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
@@ -37,8 +66,8 @@ export function TranslationInput({
         <CardContent>
           <Textarea
             placeholder="Ketik teks di sini..."
-            value={inputText}
-            onChange={(e) => onInputChange(e.target.value)}
+            value={value}
+            onChange={handleChange}
             rows={8}
             className="resize-none border-0 bg-transparent text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
           />

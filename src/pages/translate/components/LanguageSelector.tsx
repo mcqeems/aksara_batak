@@ -38,11 +38,8 @@ export function LanguageSelector({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="id">Indonesia</SelectItem>
-              <SelectItem value="btk">Batak Toba</SelectItem>
-              <SelectItem value="btk-mdl">Batak Mandailing</SelectItem>
-              <SelectItem value="btk-sml">Batak Simalungun</SelectItem>
-              <SelectItem value="btk-kro">Batak Karo</SelectItem>
-              <SelectItem value="btk-pkp">Batak Pakpak (Dairi)</SelectItem>
+              <SelectItem value="batak_latin">Batak Toba</SelectItem>
+              <SelectItem value="batak_aksara">Aksara Batak</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -64,11 +61,8 @@ export function LanguageSelector({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="id">Indonesia</SelectItem>
-              <SelectItem value="btk">Batak Toba</SelectItem>
-              <SelectItem value="btk-mdl">Batak Mandailing</SelectItem>
-              <SelectItem value="btk-sml">Batak Simalungun</SelectItem>
-              <SelectItem value="btk-kro">Batak Karo</SelectItem>
-              <SelectItem value="btk-pkp">Batak Pakpak (Dairi)</SelectItem>
+              <SelectItem value="batak_latin">Batak Toba</SelectItem>
+              <SelectItem value="batak_aksara">Aksara Batak</SelectItem>
             </SelectContent>
           </Select>
         </div>

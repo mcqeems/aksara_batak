@@ -1,53 +1,56 @@
 import { useState } from 'react';
+import api from '@/services/api';
 
 export function useTranslation() {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
   const [sourceLang, setSourceLang] = useState('id');
-  const [targetLang, setTargetLang] = useState('btk');
+  const [targetLang, setTargetLang] = useState('batak_aksara');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const dictionary: { [key: string]: { [key: string]: string } } = {
-    id: {
-      selamat: 'horas',
-      pagi: 'pagi',
-      siang: 'arian',
-      malam: 'borngin',
-      terima: 'jalo',
-      kasih: 'asi',
-      halo: 'horas',
-      baik: 'bagus',
-    },
-    btk: {
-      horas: 'selamat',
-      pagi: 'pagi',
-      arian: 'siang',
-      borngin: 'malam',
-      jalo: 'terima',
-      asi: 'kasih',
-      bagus: 'baik',
-    },
-  };
+  const handleTranslateText = async () => {
+    if (!inputText.trim() || isLoading) return;
 
-  const simulateTranslation = (text: string, from: string) => {
-    const words = text.toLowerCase().split(' ');
-    const translatedWords = words.map((word) => {
-      return dictionary[from]?.[word] || word;
-    });
-    return translatedWords.join(' ');
-  };
+    setIsLoading(true);
+    setError(null);
+    setOutputText('');
 
-  const handleTranslateText = () => {
-    const translated = simulateTranslation(inputText, sourceLang);
-    setOutputText(translated);
+    const directionId = `${sourceLang}_to_${targetLang}`;
+
+    try {
+      const response = await api.post('v1/translate', {
+        text: inputText,
+        direction: directionId,
+      });
+
+      if (response.data && response.data.data.translated_text) {
+        setOutputText(response.data.data.translated_text);
+      } else {
+        throw new Error('Invalid response from server');
+      }
+    } catch (err) {
+      const errorMessage = 'Gagal menerjemahkan. Silakan coba lagi nanti.';
+      setError(errorMessage);
+      console.error('Translation API error:', err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSwapLanguages = () => {
     setSourceLang(targetLang);
     setTargetLang(sourceLang);
+    // Optional: swap text as well
+    const currentInput = inputText;
+    setInputText(outputText);
+    setOutputText(currentInput);
   };
 
   const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(outputText);
+    if (outputText && !isLoading && !error) {
+      navigator.clipboard.writeText(outputText);
+    }
   };
 
   return {
@@ -55,6 +58,8 @@ export function useTranslation() {
     outputText,
     sourceLang,
     targetLang,
+    isLoading,
+    error,
     setInputText,
     setSourceLang,
     setTargetLang,

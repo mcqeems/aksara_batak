@@ -17,6 +17,8 @@ function Translate() {
     outputText,
     sourceLang,
     targetLang,
+    isLoading,
+    error,
     setInputText,
     setSourceLang,
     setTargetLang,
@@ -54,19 +56,21 @@ function Translate() {
 
             <TranslateButton
               onTranslate={handleTranslateText}
-              disabled={!inputText}
+              disabled={!inputText || isLoading}
               isMobile={true}
             />
 
             <TranslationOutput
               outputText={outputText}
               onCopyToClipboard={handleCopyToClipboard}
+              isLoading={isLoading}
+              error={error}
             />
           </div>
 
           <TranslateButton
             onTranslate={handleTranslateText}
-            disabled={!inputText}
+            disabled={!inputText || isLoading}
             isMobile={false}
           />
         </motion.div>
