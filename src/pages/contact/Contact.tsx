@@ -11,7 +11,8 @@ import {
 } from './components';
 
 function Contact() {
-  const { formData, handleChange, handleSubmit } = useContact();
+  const { formData, status, statusLoading, handleChange, handleSubmit } =
+    useContact();
 
   return (
     <div className="bg-background relative flex min-h-screen flex-col overflow-hidden">
@@ -62,6 +63,8 @@ function Contact() {
             <ContactHeader />
             <ContactForm
               formData={formData}
+              status={status}
+              statusLoading={statusLoading}
               onFormChange={handleChange}
               onSubmit={handleSubmit}
             />

@@ -5,6 +5,7 @@ import { SendHorizonal, ClipboardCopy, Check } from 'lucide-react';
 import api from '@/services/api';
 import TypingLoader from '@/components/ui/loader/TypingLoader';
 import Loader from '@/components/ui/loader';
+import Bot from '@/components/icon/Bot';
 
 interface Message {
   text: string;
@@ -149,44 +150,56 @@ const Chat: React.FC = () => {
         ref={chatContainerRef}
         className="[&::-webkit-scrollbar-track] [&::-webkit-scrollbar-thumb]:bg-primary mx-auto w-full max-w-4xl flex-1 space-y-6 overflow-y-auto md:p-4 [&::-webkit-scrollbar]:w-1 md:[&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:rounded-full"
       >
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`group relative flex items-start gap-x-3 ${
-              message.isUser ? 'justify-end' : 'justify-start'
-            }`}
-          >
+        {messages.length !== 0 ? (
+          messages.map((message, index) => (
             <div
-              className={`max-w-xl rounded-2xl px-4 py-2 md:max-w-2xl lg:max-w-4xl ${
-                message.isUser
-                  ? 'dark:bg-muted-foreground/50 dark:text-primary bg-muted text-accent motion-preset-focus'
-                  : 'text-primary'
+              key={index}
+              className={`group relative flex items-start gap-x-3 ${
+                message.isUser ? 'justify-end' : 'justify-start'
               }`}
             >
-              {isLoading && !message.isUser && index === messages.length - 1 ? (
-                <TypingLoader />
-              ) : (
-                <p className="break-words">{message.text}</p>
+              <div
+                className={`max-w-xl rounded-2xl px-4 py-2 md:max-w-2xl lg:max-w-4xl ${
+                  message.isUser
+                    ? 'dark:bg-muted-foreground/50 dark:text-primary bg-muted text-accent motion-preset-focus'
+                    : 'text-primary'
+                }`}
+              >
+                {isLoading &&
+                !message.isUser &&
+                index === messages.length - 1 ? (
+                  <TypingLoader />
+                ) : (
+                  <p className="break-words">{message.text}</p>
+                )}
+              </div>
+              {!message.isUser && message.text && !isLoading && (
+                <div className="absolute -bottom-8 left-2 flex items-center space-x-1 opacity-0 transition-opacity group-hover:opacity-100">
+                  <Button
+                    variant="link"
+                    size="icon"
+                    className="h-10 w-10"
+                    onClick={() => handleCopy(message.text, index)}
+                  >
+                    {copiedIndex === index ? (
+                      <Check className="h-4 w-4 text-green-700 dark:text-green-500" />
+                    ) : (
+                      <ClipboardCopy className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
               )}
             </div>
-            {!message.isUser && message.text && !isLoading && (
-              <div className="absolute -bottom-8 left-2 flex items-center space-x-1 opacity-0 transition-opacity group-hover:opacity-100">
-                <Button
-                  variant="link"
-                  size="icon"
-                  className="h-10 w-10"
-                  onClick={() => handleCopy(message.text, index)}
-                >
-                  {copiedIndex === index ? (
-                    <Check className="h-4 w-4 text-green-700 dark:text-green-500" />
-                  ) : (
-                    <ClipboardCopy className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
-            )}
+          ))
+        ) : (
+          <div>
+            <Bot className="motion-preset-focus" />
+            <p className="text-muted-foreground motion-preset-focus text-center">
+              Halo aku Dongan Digital, Tanyakan apa saja tentang budaya Batak
+              disini!
+            </p>
           </div>
-        ))}
+        )}
       </div>
       <div className="mx-auto w-full max-w-4xl border-t p-4">
         <div className="motion-preset-expand flex items-center">

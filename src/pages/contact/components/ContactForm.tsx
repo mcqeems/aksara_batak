@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Send, MessageCircle } from 'lucide-react';
+import { Send, MessageCircle, LoaderCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -18,6 +18,8 @@ interface ContactFormProps {
     email: string;
     message: string;
   };
+  status?: string;
+  statusLoading: boolean;
   onFormChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
@@ -26,6 +28,8 @@ interface ContactFormProps {
 
 export function ContactForm({
   formData,
+  status,
+  statusLoading,
   onFormChange,
   onSubmit,
 }: ContactFormProps) {
@@ -98,6 +102,8 @@ export function ContactForm({
               onChange={onFormChange}
               required
               className="resize-none text-sm"
+              minLength={10}
+              maxLength={1000}
             />
           </motion.div>
           <motion.div
@@ -106,10 +112,31 @@ export function ContactForm({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.9 }}
           >
-            <Button type="submit" size="lg" className="text-base font-semibold">
-              <Send className="mr-2 h-4 w-4" />
-              Kirim Pesan
-            </Button>
+            {status ? (
+              <div className="bg-card motion-preset-focus mb-4 rounded-lg p-4">
+                <p className="text-primary text-center">{status}</p>
+              </div>
+            ) : null}
+            {statusLoading ? (
+              <Button
+                type="submit"
+                size="lg"
+                className="text-base font-semibold"
+                disabled={true}
+              >
+                <LoaderCircle className="motion-preset-spin mr-2 h-4 w-4" />
+                Mengirim...
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                size="lg"
+                className="text-base font-semibold"
+              >
+                <Send className="mr-2 h-4 w-4" />
+                Kirim Pesan
+              </Button>
+            )}
           </motion.div>
         </form>
       </CardContent>
