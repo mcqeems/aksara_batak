@@ -4,18 +4,29 @@ import { Input } from '@/components/ui/input';
 import { SendHorizonal, ClipboardCopy, Check } from 'lucide-react';
 import api from '@/services/api';
 import TypingLoader from '@/components/ui/loader/TypingLoader';
+import Loader from '@/components/ui/loader';
 
 interface Message {
   text: string;
   isUser: boolean;
 }
 
+interface MessageHistory {
+  message: string;
+  reply: string;
+}
+
+interface APIArray<T> {
+  data: T;
+}
+
 const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isHistoryLoading, setIsHistoryLoading] = useState<boolean>(true);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
-  const [historyValue, setHistoryValue] = useState(null);
+  const [historyValue, setHistoryValue] = useState<string[]>([]);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const handleCopy = (text: string, index: number) => {
@@ -38,11 +49,13 @@ const Chat: React.FC = () => {
       try {
         const response = await api.post('/v1/chat/private', {
           message:
-            currentInputValue + 'Ini adalah memori anda: ' + historyValue,
+            currentInputValue + '// Ini adalah memori anda: ' + historyValue,
         });
-        const aiHistoryResponse = response.data?.data?.history.map(
-          (item: { reply: string }) => item.reply
-        );
+        const aiHistoryResponse =
+          response.data?.data?.history?.map(
+            (item: { reply: string }) => item.reply
+          ) || []; // Tambahkan '|| []' sebagai fallback jika history null
+
         setHistoryValue(aiHistoryResponse);
         const aiResponse = response.data?.data?.reply;
 
@@ -90,17 +103,51 @@ const Chat: React.FC = () => {
   };
 
   useEffect(() => {
+    const fetchMessagesHistory = async () => {
+      try {
+        const response = await api.get<APIArray<MessageHistory[]>>(
+          '/v1/chat/private/histories'
+        );
+        const responseData = response.data.data;
+        const formattedMessages: Message[] = responseData.flatMap((item) => [
+          { text: item.message.split('//')[0].trim(), isUser: true },
+          { text: item.reply, isUser: false },
+        ]);
+        setMessages(formattedMessages);
+        const replies = responseData.map((item) => item.reply);
+        setHistoryValue(replies);
+      } catch (error) {
+        console.log('Gagal mengambil data history' + error);
+      } finally {
+        setIsHistoryLoading(false);
+      }
+    };
+
+    fetchMessagesHistory();
+  }, []);
+
+  useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
+      setTimeout(() => {
+        chatContainerRef.current!.scrollTop =
+          chatContainerRef.current!.scrollHeight;
+      }, 100);
     }
   }, [messages]);
+
+  if (isHistoryLoading) {
+    return (
+      <div className="flex h-[calc(100vh-4rem)] items-center justify-center">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-[calc(100vh-4rem)] flex-col">
       <div
         ref={chatContainerRef}
-        className="mx-auto w-full max-w-4xl flex-1 space-y-6 overflow-y-auto md:p-4"
+        className="[&::-webkit-scrollbar-track] [&::-webkit-scrollbar-thumb]:bg-primary mx-auto w-full max-w-4xl flex-1 space-y-6 overflow-y-auto md:p-4 [&::-webkit-scrollbar]:w-1 md:[&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:rounded-full"
       >
         {messages.map((message, index) => (
           <div

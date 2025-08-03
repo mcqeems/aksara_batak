@@ -79,19 +79,6 @@ function Dashboard() {
     }
   };
 
-  const getRankBadgeColor = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return 'bg-yellow-500 text-white';
-      case 2:
-        return 'bg-gray-400 text-white';
-      case 3:
-        return 'bg-amber-600 text-white';
-      default:
-        return 'bg-primary text-white';
-    }
-  };
-
   if (isLoading) {
     return (
       <div className="flex h-full w-full items-center justify-center">

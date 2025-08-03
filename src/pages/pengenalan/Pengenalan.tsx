@@ -18,7 +18,7 @@ function Pengenalan() {
           className="bg-card/50 border-border/50 w-full max-w-6xl rounded-2xl border p-6 shadow-xl backdrop-blur-sm"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.5 }}
         >
           <PengenalanHeader />
           <LearningSection />
