@@ -168,7 +168,7 @@ export function CallToActionSection() {
         <BookMarked size={22} />
       </motion.div>
       <motion.div
-        className="text-primary/20 absolute top-1/2 left-1/12"
+        className="text-primary/20 absolute top-1/2 left-4 md:left-1/12"
         animate={{
           y: [0, -8, 0],
           rotate: [0, 180, 0],
@@ -180,10 +180,10 @@ export function CallToActionSection() {
           delay: 1.5,
         }}
       >
-        <Star size={14} />
+        <Star size={10} className="md:h-3 md:w-3" />
       </motion.div>
       <motion.div
-        className="text-destructive/20 absolute top-1/2 right-1/12"
+        className="text-destructive/20 absolute top-1/2 right-4 md:right-1/12"
         animate={{
           y: [0, 12, 0],
           rotate: [0, -180, 0],
@@ -195,7 +195,7 @@ export function CallToActionSection() {
           delay: 2.5,
         }}
       >
-        <Sparkles size={12} />
+        <Sparkles size={8} className="md:h-3 md:w-3" />
       </motion.div>
 
       <div className="relative z-10 container mx-auto max-w-4xl">
@@ -207,16 +207,16 @@ export function CallToActionSection() {
           className="relative"
         >
           {/* Decorative Elements */}
-          <div className="border-primary absolute -top-8 -left-8 h-16 w-16 border-t-2 border-l-2 opacity-60"></div>
-          <div className="border-primary absolute -top-8 -right-8 h-16 w-16 border-t-2 border-r-2 opacity-60"></div>
-          <div className="border-primary absolute -bottom-8 -left-8 h-16 w-16 border-b-2 border-l-2 opacity-60"></div>
-          <div className="border-primary absolute -right-8 -bottom-8 h-16 w-16 border-r-2 border-b-2 opacity-60"></div>
+          <div className="border-primary absolute -top-4 -left-4 h-8 w-8 border-t-2 border-l-2 opacity-60 md:-top-8 md:-left-8 md:h-16 md:w-16"></div>
+          <div className="border-primary absolute -top-4 -right-4 h-8 w-8 border-t-2 border-r-2 opacity-60 md:-top-8 md:-right-8 md:h-16 md:w-16"></div>
+          <div className="border-primary absolute -bottom-4 -left-4 h-8 w-8 border-b-2 border-l-2 opacity-60 md:-bottom-8 md:-left-8 md:h-16 md:w-16"></div>
+          <div className="border-primary absolute -right-4 -bottom-4 h-8 w-8 border-r-2 border-b-2 opacity-60 md:-right-8 md:-bottom-8 md:h-16 md:w-16"></div>
 
           {/* Main Content */}
           <div className="bg-card/60 border-border/50 relative rounded-3xl border p-12 shadow-2xl backdrop-blur-sm">
             {/* Floating Elements around content */}
             <motion.div
-              className="text-primary/40 absolute -top-4 -left-4"
+              className="text-primary/40 absolute -top-2 -left-2 md:-top-4 md:-left-4"
               animate={{
                 y: [0, -10, 0],
                 rotate: [0, 360, 0],
@@ -227,10 +227,10 @@ export function CallToActionSection() {
                 ease: 'easeInOut',
               }}
             >
-              <Star size={24} />
+              <Star size={16} className="md:h-6 md:w-6" />
             </motion.div>
             <motion.div
-              className="text-destructive/40 absolute -top-4 -right-4"
+              className="text-destructive/40 absolute -top-2 -right-2 md:-top-4 md:-right-4"
               animate={{
                 y: [0, 10, 0],
                 rotate: [0, -360, 0],
@@ -242,10 +242,10 @@ export function CallToActionSection() {
                 delay: 1,
               }}
             >
-              <Sparkles size={20} />
+              <Sparkles size={14} className="md:h-5 md:w-5" />
             </motion.div>
             <motion.div
-              className="text-primary/30 absolute -bottom-4 -left-4"
+              className="text-primary/30 absolute -bottom-2 -left-2 md:-bottom-4 md:-left-4"
               animate={{
                 y: [0, 8, 0],
                 rotate: [0, 180, 0],
@@ -257,10 +257,10 @@ export function CallToActionSection() {
                 delay: 2,
               }}
             >
-              <Heart size={18} />
+              <Heart size={12} className="md:h-4 md:w-4" />
             </motion.div>
             <motion.div
-              className="text-destructive/30 absolute -right-4 -bottom-4"
+              className="text-destructive/30 absolute -right-2 -bottom-2 md:-right-4 md:-bottom-4"
               animate={{
                 y: [0, -8, 0],
                 rotate: [0, -180, 0],
@@ -272,7 +272,7 @@ export function CallToActionSection() {
                 delay: 1.5,
               }}
             >
-              <BookMarked size={22} />
+              <BookMarked size={16} className="md:h-5 md:w-5" />
             </motion.div>
 
             <div className="space-y-8">

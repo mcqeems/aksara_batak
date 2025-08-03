@@ -7,10 +7,10 @@ function Chatbot() {
     <div className="bg-background relative flex min-h-screen flex-col overflow-hidden">
       <AnimatedBackground />
 
-      <div className="relative z-10 flex flex-1 flex-col">
+      <div className="relative z-10 mt-16 flex flex-1 flex-col">
         <Navbar />
 
-        <div className="flex flex-1 items-center justify-center px-4 py-4">
+        <div className="flex flex-1 items-center justify-center px-4 py-4 pb-4">
           <ChatbotContent />
         </div>
 

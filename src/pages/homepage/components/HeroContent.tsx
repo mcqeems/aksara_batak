@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 export function HeroContent() {
   return (
     <motion.div
-      className="relative flex flex-col gap-8 text-center lg:text-left"
+      className="relative flex flex-col gap-4 text-center md:gap-8 lg:text-left"
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.8, delay: 0.4 }}

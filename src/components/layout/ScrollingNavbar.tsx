@@ -1,10 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { Play, Pause, Volume2, VolumeX, ArrowLeft } from 'lucide-react';
 
-interface SejarahNavbarProps {
+interface ScrollingNavbarProps {
   onAutoScrollToggle?: (isPlaying: boolean) => void;
   onSoundToggle?: (isMuted: boolean) => void;
   onSectionChange?: (sectionIndex: number) => void;
@@ -12,17 +12,20 @@ interface SejarahNavbarProps {
   totalSections?: number;
   isAutoScrolling?: boolean;
   isSoundMuted?: boolean;
+  sectionTitles: string[];
 }
 
-export function SejarahNavbar({
+export function ScrollingNavbar({
   onAutoScrollToggle,
   onSoundToggle,
   onSectionChange,
   currentSection = 0,
-  totalSections = 15,
+  totalSections = 0,
   isAutoScrolling = false,
   isSoundMuted = false,
-}: SejarahNavbarProps) {
+  sectionTitles,
+}: ScrollingNavbarProps) {
+  const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -52,24 +55,6 @@ export function SejarahNavbar({
   const handleSectionClick = (sectionIndex: number) => {
     onSectionChange?.(sectionIndex);
   };
-
-  const sectionTitles = [
-    'Selamat Datang',
-    'Jejak Awal',
-    'Evolusi Lokal',
-    'Para Datu & Raja',
-    'Fungsi Magis',
-    'Varian Aksara',
-    'Pengaruh Islam',
-    'Zaman Kolonial',
-    'Dokumentasi',
-    'Menjelang Kepunahan',
-    'Kebangkitan',
-    'Era Digital',
-    'Struktur Aksara',
-    'Media Tradisional',
-    'Ayo Hidupkan Lagi',
-  ];
 
   useEffect(() => {
     return () => {
@@ -104,7 +89,7 @@ export function SejarahNavbar({
       >
         {/* Back Button */}
         <motion.button
-          onClick={() => window.history.back()}
+          onClick={() => navigate(-1)}
           className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-white/10 transition-all duration-200 hover:bg-white/20"
           whileHover={{ scale: 1.1, rotate: -5 }}
           whileTap={{ scale: 0.95 }}

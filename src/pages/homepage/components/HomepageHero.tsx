@@ -11,7 +11,7 @@ export function HomepageHero() {
       <FloatingElements />
 
       <div className="relative z-10 flex items-center justify-center px-4 pb-16">
-        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
+        <div className="grid grid-cols-1 items-center gap-6 md:gap-12 lg:grid-cols-2">
           <HeroLeftSection />
           <HeroContent />
         </div>

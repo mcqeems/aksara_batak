@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { SejarahNavbar } from '@/components/layout/SejarahNavbar';
+import { ScrollingNavbar } from '@/components/layout/ScrollingNavbar';
 import gsap from 'gsap';
 import { Observer } from 'gsap/Observer';
 import { SplitText } from 'gsap/SplitText';
@@ -18,6 +18,17 @@ const LoadingScreen: React.FC = () => (
     <Loader />
   </div>
 );
+
+const sectionTitles = [
+  'Selamat Datang',
+  'Pengenalan',
+  'Struktur Dasar',
+  'Vokal & Diakritik',
+  'Konsonan',
+  'Aturan Penulisan',
+  'Contoh',
+  'Latihan',
+];
 
 const Penjelasan: React.FC = () => {
   const componentRef = useRef<HTMLDivElement>(null);
@@ -124,74 +135,46 @@ const Penjelasan: React.FC = () => {
     (isPlaying: boolean) => {
       setIsAutoScrolling(isPlaying);
 
-      if (isPlaying) {
-        // Start auto-scroll based on audio completion
-        const startAutoScroll = () => {
-          const currentAudio = sectionAudioPlayersRef.current[currentSection];
-          if (currentAudio) {
-            // Listen for audio end event
-            const handleAudioEnd = () => {
-              const nextSection = currentSection + 1;
-              if (nextSection < 8) {
-                setCurrentSection(nextSection);
-                navigateToSection(nextSection);
-                // Start next audio and continue auto-scroll
-                setTimeout(() => {
-                  if (isAutoScrolling) {
-                    startAutoScroll();
-                  }
-                }, 1000); // Small delay before next section
-              } else {
-                setIsAutoScrolling(false);
-              }
-            };
-
-            currentAudio.addEventListener('ended', handleAudioEnd, {
-              once: true,
-            });
-            currentAudio.play().catch(() => {
-              // If audio fails, move to next section after 3 seconds
-              setTimeout(() => {
-                if (isAutoScrolling) {
-                  const nextSection = currentSection + 1;
-                  if (nextSection < 8) {
-                    setCurrentSection(nextSection);
-                    navigateToSection(nextSection);
-                    startAutoScroll();
-                  } else {
-                    setIsAutoScrolling(false);
-                  }
-                }
-              }, 3000);
-            });
-          } else {
-            // If no audio, move to next section after 3 seconds
-            setTimeout(() => {
-              if (isAutoScrolling) {
-                const nextSection = currentSection + 1;
-                if (nextSection < 8) {
-                  setCurrentSection(nextSection);
-                  navigateToSection(nextSection);
-                  startAutoScroll();
-                } else {
-                  setIsAutoScrolling(false);
-                }
-              }
-            }, 3000);
-          }
-        };
-
-        startAutoScroll();
-      } else {
-        // Stop auto-scroll
+      if (!isPlaying) {
         if (autoScrollIntervalRef.current) {
-          clearInterval(autoScrollIntervalRef.current);
+          clearTimeout(autoScrollIntervalRef.current);
           autoScrollIntervalRef.current = null;
         }
+        sectionAudioPlayersRef.current.forEach(audio => {
+          if (audio && !audio.paused) {
+            audio.pause();
+          }
+        });
       }
     },
-    [navigateToSection, currentSection, isAutoScrolling]
+    []
   );
+
+  useEffect(() => {
+    if (!isAutoScrolling) {
+      return;
+    }
+
+    const advance = () => {
+      const nextSection = currentSection + 1;
+      if (nextSection < 8) {
+        navigateToSection(nextSection);
+      } else {
+        setIsAutoScrolling(false); // End of the journey
+      }
+    };
+
+    // If auto-scrolling is active, and we are not at the last section,
+    // set a timeout to advance to the next section after a delay.
+    // The audio playback will be handled by manageAudioPlayback after the GSAP animation.
+    autoScrollIntervalRef.current = setTimeout(advance, 3000); // Default delay if no audio or for intro
+
+    return () => {
+      if (autoScrollIntervalRef.current) {
+        clearTimeout(autoScrollIntervalRef.current);
+      }
+    };
+  }, [isAutoScrolling, currentSection, navigateToSection]);
 
   // Sound toggle functionality
   const handleSoundToggle = useCallback((isMuted: boolean) => {
@@ -509,7 +492,7 @@ const Penjelasan: React.FC = () => {
 
   return (
     <div className="penjelasan-page bg-background text-foreground min-h-screen overflow-x-hidden">
-      <SejarahNavbar
+      <ScrollingNavbar
         onAutoScrollToggle={handleAutoScrollToggle}
         onSoundToggle={handleSoundToggle}
         onSectionChange={handleSectionChange}
@@ -517,6 +500,7 @@ const Penjelasan: React.FC = () => {
         totalSections={8}
         isAutoScrolling={isAutoScrolling}
         isSoundMuted={isSoundMuted}
+        sectionTitles={sectionTitles}
       />
       <div
         ref={componentRef}
