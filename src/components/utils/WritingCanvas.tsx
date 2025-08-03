@@ -1,11 +1,6 @@
 // src/components/utils/WritingCanvas.tsx
 
-import React, {
-  useRef,
-  useState,
-  forwardRef,
-  useImperativeHandle,
-} from 'react';
+import { useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { Stage, Layer, Line, Rect } from 'react-konva';
 import type { KonvaEventObject } from 'konva/lib/Node';
 import type Konva from 'konva';

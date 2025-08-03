@@ -1,5 +1,4 @@
 import Lottie from 'lottie-react';
-import React from 'react';
 import myBot from '../../../public/assets/json-lottie/bot.json';
 
 interface ClassName {

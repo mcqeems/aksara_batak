@@ -1,4 +1,3 @@
-import React from 'react';
 import Lottie from 'lottie-react';
 import successAlert from '../../../public/assets/json-lottie/success.json';
 

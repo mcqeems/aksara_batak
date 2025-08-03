@@ -1,4 +1,3 @@
-import React from 'react';
 import LogoSVG from '/assets/logo/podahorasOriginal.svg';
 
 function Logo() {

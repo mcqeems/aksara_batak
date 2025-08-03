@@ -1,4 +1,3 @@
-import React from 'react';
 import Lottie from 'lottie-react';
 import failAlert from '../../../public/assets/json-lottie/failed.json';
 
