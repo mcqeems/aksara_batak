@@ -78,4 +78,10 @@ export const batakPenjelasanContent: PenjelasanSection[] = [
     text: `Meskipun menghadapi tantangan dari modernisasi dan dominasi aksara Latin, upaya pelestarian Aksara Batak terus dilakukan. Aksara ini telah ditambahkan ke standar Unicode, memungkinkan representasi digital dan adaptasi ke huruf Latin. Ini membantu menjaga agar bentuk-bentuk aksara tradisional tetap dikenal dan dapat diakses di era modern, meskipun penggunaannya dalam kehidupan sehari-hari terbatas.`,
     audio: '/assets/sounds/aksara/12.mp3',
   },
+  {
+    id: 13,
+    title: 'Akhir Perjalanan',
+    text: `Sekarang Anda telah memahami perkembangan dan karakteristik Aksara Batak. Mari kita lanjutkan untuk mempelajari lebih dalam tentang cara menulis dan menggunakan aksara ini dalam kehidupan sehari-hari.`,
+    audio: '/assets/sounds/aksara/13.mp3',
+  },
 ];

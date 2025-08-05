@@ -237,7 +237,7 @@ const Sejarah: React.FC = () => {
       if (isSoundMuted) {
         globalBgMusicRef.current.volume = 0;
       } else {
-        globalBgMusicRef.current.volume = currentSection === 0 ? 0.3 : 0.1;
+        globalBgMusicRef.current.volume = currentSection === 0 ? 0.3 : 0.07;
       }
     }
   }, [currentSection, isSoundMuted]);
@@ -518,18 +518,34 @@ const Sejarah: React.FC = () => {
           // Default animation for all sections (including section 0)
           const textElement = currentSection.querySelector('p, h2');
           if (textElement) {
-            const animationDirection = index % 2 === 0 ? -30 : 30;
-            tl.fromTo(
-              textElement,
-              { autoAlpha: 0, xPercent: animationDirection },
-              {
-                autoAlpha: 1,
-                xPercent: 0,
-                duration: 1,
-                ease: 'power2.out',
-              },
-              contentAnimationStartTime
-            );
+            // Special animation for final section (index 15) - text comes from top
+            if (index === 15) {
+              tl.fromTo(
+                textElement,
+                { autoAlpha: 0, yPercent: -50 },
+                {
+                  autoAlpha: 1,
+                  yPercent: 0,
+                  duration: 1.2,
+                  ease: 'power2.out',
+                },
+                contentAnimationStartTime
+              );
+            } else {
+              // Default animation for other sections
+              const animationDirection = index % 2 === 0 ? -30 : 30;
+              tl.fromTo(
+                textElement,
+                { autoAlpha: 0, xPercent: animationDirection },
+                {
+                  autoAlpha: 1,
+                  xPercent: 0,
+                  duration: 1,
+                  ease: 'power2.out',
+                },
+                contentAnimationStartTime
+              );
+            }
           }
 
           // Image animations for sections 2-16
@@ -550,6 +566,26 @@ const Sejarah: React.FC = () => {
             { id: 'ayo-hidupkan-lagi-img', index: 14, direction: 'left' },
             { id: 'final-section-img', index: 15, direction: 'right' },
           ];
+
+          // Special animation for final section buttons
+          if (index === 15) {
+            const buttonsContainer = currentSection.querySelector(
+              '.flex.flex-col.items-center.gap-4'
+            );
+            if (buttonsContainer) {
+              tl.fromTo(
+                buttonsContainer,
+                { autoAlpha: 0, yPercent: -30 },
+                {
+                  autoAlpha: 1,
+                  yPercent: 0,
+                  duration: 1,
+                  ease: 'power2.out',
+                },
+                contentAnimationStartTime + 0.3
+              );
+            }
+          }
 
           imageConfigs.forEach((config) => {
             if (index === config.index) {
@@ -749,11 +785,17 @@ const Sejarah: React.FC = () => {
                 <h2 className="section-heading text-foreground text-center text-4xl md:text-5xl">
                   <b>Sejarah Aksara Batak</b>
                   <br />
-                  <span className="text-muted-foreground text-lg md:text-xl">
+                  <span className="text-muted-foreground scroll-text text-lg md:text-xl">
                     Scroll ke bawah untuk memulai
                   </span>
                 </h2>
-                <div className="arrowCta scale-70 md:scale-100"></div>
+                <div className="arrowCta scale-70 md:scale-100">
+                  <div className="arrow-container">
+                    <div className="arrow"></div>
+                    <div className="arrow"></div>
+                    <div className="arrow"></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -774,13 +816,13 @@ const Sejarah: React.FC = () => {
           <div className="outer">
             <div className="inner">
               <div className="bg">
-                <p className="text-foreground absolute top-20 z-50 px-2 text-center text-xl text-shadow-md sm:text-3xl md:px-32">
+                <p className="text-foreground absolute top-20 z-50 px-4 text-center text-xl text-shadow-md sm:text-3xl md:px-42 md:font-semibold">
                   {batakNarrationContent[0].text}
                 </p>
                 <img
                   id="jejak-awal-img"
-                  className="relative top-[120px] h-[700px] object-cover md:top-[120px]"
-                  src="/assets/images/ilustration/1.png"
+                  className="relative top-[210px] h-[500px] object-cover md:top-[120px] md:h-[800px]"
+                  src="/assets/images/sejarah/ilustrasi/1.png"
                   alt="Ilustrasi Aksara Batak"
                 />
               </div>
@@ -803,13 +845,13 @@ const Sejarah: React.FC = () => {
           <div className="outer">
             <div className="inner">
               <div className="bg">
-                <p className="text-foreground absolute top-20 z-50 w-full max-w-[600px] px-2 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
+                <p className="text-foreground absolute top-20 z-50 w-full max-w-[600px] px-5 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
                   {batakNarrationContent[1].text}
                 </p>
                 <img
                   id="evolusi-lokal-img"
-                  className="relative top-[120px] h-[700px] object-cover sm:right-52 md:top-[120px]"
-                  src="/assets/images/ilustration/2.png"
+                  className="relative top-[210px] h-[450px] scale-x-[-1] object-cover sm:right-52 md:top-[120px] md:h-[700px]"
+                  src="/assets/images/sejarah/ilustrasi/2.png"
                   alt="Ilustrasi Jejak Awal"
                 />
               </div>
@@ -832,13 +874,13 @@ const Sejarah: React.FC = () => {
           <div className="outer">
             <div className="inner">
               <div className="bg">
-                <p className="text-foreground absolute top-20 z-50 w-full max-w-[500px] px-2 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
+                <p className="text-foreground absolute top-20 z-50 w-full max-w-[500px] px-5 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
                   {batakNarrationContent[2].text}
                 </p>
                 <img
                   id="para-datu-img"
-                  className="relative top-[120px] h-[700px] scale-x-[-1] object-cover md:top-[120px] md:left-56 md:h-[800px]"
-                  src="/assets/images/ilustration/3.png"
+                  className="relative top-[220px] h-[450px] scale-x-[-1] object-cover md:top-[120px] md:left-56 md:h-[800px]"
+                  src="/assets/images/sejarah/ilustrasi/3.png"
                   alt="Ilustrasi Evolusi Lokal"
                 />
               </div>
@@ -861,13 +903,13 @@ const Sejarah: React.FC = () => {
           <div className="outer">
             <div className="inner">
               <div className="bg">
-                <p className="text-foreground absolute top-20 right-2 z-50 w-full max-w-[600px] px-2 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
+                <p className="text-foreground absolute top-20 z-50 w-full max-w-[600px] px-5 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:right-25 md:text-right">
                   {batakNarrationContent[3].text}
                 </p>
                 <img
                   id="fungsi-magis-img"
-                  className="relative top-[120px] h-[650px] object-cover md:top-[120px] md:right-56 md:h-[750px]"
-                  src="/assets/images/ilustration/4.png"
+                  className="relative top-[210px] h-[450px] object-cover md:top-[120px] md:right-56 md:h-[750px]"
+                  src="/assets/images/sejarah/ilustrasi/4.png"
                   alt="Ilustrasi Para Datu dan Raja"
                 />
               </div>
@@ -890,13 +932,13 @@ const Sejarah: React.FC = () => {
           <div className="outer">
             <div className="inner">
               <div className="bg">
-                <p className="text-foreground absolute top-20 z-50 w-full max-w-[500px] px-2 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
+                <p className="text-foreground absolute top-20 z-50 w-full max-w-[500px] px-5 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
                   {batakNarrationContent[4].text}
                 </p>
                 <img
                   id="varian-aksara-img"
-                  className="relative top-[120px] h-[700px] scale-x-[-1] object-cover md:top-[120px] md:left-64 md:h-[800px]"
-                  src="/assets/images/ilustration/5.png"
+                  className="relative top-[210px] h-[450px] scale-x-[-1] object-cover md:top-[120px] md:left-64 md:h-[800px]"
+                  src="/assets/images/sejarah/ilustrasi/5.png"
                   alt="Ilustrasi Varian Aksara"
                 />
               </div>
@@ -919,13 +961,13 @@ const Sejarah: React.FC = () => {
           <div className="outer">
             <div className="inner">
               <div className="bg">
-                <p className="text-foreground absolute top-20 z-50 w-full max-w-[600px] px-2 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
+                <p className="text-foreground absolute top-20 z-50 w-full max-w-[600px] px-6 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
                   {batakNarrationContent[5].text}
                 </p>
                 <img
                   id="pengaruh-islam-img"
-                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-64 md:h-[800px]"
-                  src="/assets/images/ilustration/6.png"
+                  className="relative top-[210px] h-[410px] object-cover md:top-[120px] md:left-80 md:h-[800px]"
+                  src="/assets/images/sejarah/ilustrasi/6.png"
                   alt="Ilustrasi Pengaruh Islam"
                 />
               </div>
@@ -948,13 +990,13 @@ const Sejarah: React.FC = () => {
           <div className="outer">
             <div className="inner">
               <div className="bg">
-                <p className="text-foreground absolute top-20 z-50 w-full max-w-[700px] px-2 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
+                <p className="text-foreground absolute top-20 z-50 w-full max-w-[700px] px-6 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
                   {batakNarrationContent[6].text}
                 </p>
                 <img
                   id="zaman-kolonial-img"
-                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-64 md:h-[800px]"
-                  src="/assets/images/ilustration/7.png"
+                  className="relative top-[230px] h-[450px] object-cover md:top-[120px] md:left-80 md:h-[800px]"
+                  src="/assets/images/sejarah/ilustrasi/7.png"
                   alt="Ilustrasi Zaman Kolonial"
                 />
               </div>
@@ -977,13 +1019,13 @@ const Sejarah: React.FC = () => {
           <div className="outer">
             <div className="inner">
               <div className="bg">
-                <p className="text-foreground absolute top-20 z-50 w-full max-w-[600px] px-2 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
+                <p className="text-foreground absolute top-20 z-50 w-full max-w-[600px] px-5 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
                   {batakNarrationContent[7].text}
                 </p>
                 <img
                   id="dokumentasi-img"
-                  className="relative top-[120px] h-[700px] scale-x-[-1] object-cover md:top-[98px] md:right-64 md:h-[800px]"
-                  src="/assets/images/ilustration/8.png"
+                  className="relative top-[220px] h-[450px] scale-x-[-1] object-cover md:top-[160px] md:right-64 md:h-[800px]"
+                  src="/assets/images/sejarah/ilustrasi/8.png"
                   alt="Ilustrasi Dokumentasi"
                 />
               </div>
@@ -1006,13 +1048,13 @@ const Sejarah: React.FC = () => {
           <div className="outer">
             <div className="inner">
               <div className="bg">
-                <p className="text-foreground absolute top-20 z-50 w-full max-w-[650px] px-2 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
+                <p className="text-foreground absolute top-20 z-50 w-full max-w-[650px] px-4 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
                   {batakNarrationContent[8].text}
                 </p>
                 <img
                   id="menjelang-kepunahan-img"
-                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-56 md:h-[800px]"
-                  src="/assets/images/ilustration/9.png"
+                  className="relative top-[210px] h-[410px] object-cover md:top-[120px] md:left-80 md:h-[800px]"
+                  src="/assets/images/sejarah/ilustrasi/9.png"
                   alt="Ilustrasi Menjelang Kepunahan"
                 />
               </div>
@@ -1035,13 +1077,13 @@ const Sejarah: React.FC = () => {
           <div className="outer">
             <div className="inner">
               <div className="bg">
-                <p className="text-foreground absolute top-20 z-50 w-full max-w-[700px] px-2 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
+                <p className="text-foreground absolute top-20 z-50 w-full max-w-[700px] px-4 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
                   {batakNarrationContent[9].text}
                 </p>
                 <img
                   id="kebangkitan-img"
-                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:right-64 md:h-[800px]"
-                  src="/assets/images/ilustration/10.png"
+                  className="relative top-[210px] h-[450px] object-cover md:top-[120px] md:right-72 md:h-[800px]"
+                  src="/assets/images/sejarah/ilustrasi/10.png"
                   alt="Ilustrasi Kebangkitan"
                 />
               </div>
@@ -1064,13 +1106,13 @@ const Sejarah: React.FC = () => {
           <div className="outer">
             <div className="inner">
               <div className="bg">
-                <p className="text-foreground absolute top-20 z-50 w-full max-w-[600px] px-2 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
+                <p className="text-foreground absolute top-20 z-50 w-full max-w-[600px] px-4 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
                   {batakNarrationContent[10].text}
                 </p>
                 <img
                   id="era-digital-img"
-                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-56 md:h-[800px]"
-                  src="/assets/images/ilustration/11.png"
+                  className="relative top-[210px] h-[480px] object-cover md:top-[120px] md:left-72 md:h-[800px]"
+                  src="/assets/images/sejarah/ilustrasi/11.png"
                   alt="Ilustrasi Era Digital"
                 />
               </div>
@@ -1093,13 +1135,13 @@ const Sejarah: React.FC = () => {
           <div className="outer">
             <div className="inner">
               <div className="bg">
-                <p className="text-foreground absolute top-20 z-50 w-full max-w-[750px] px-2 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
+                <p className="text-foreground absolute top-20 z-50 w-full max-w-[750px] px-4 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
                   {batakNarrationContent[11].text}
                 </p>
                 <img
                   id="struktur-aksara-img"
-                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:right-68 md:h-[800px]"
-                  src="/assets/images/ilustration/12.png"
+                  className="relative top-[210px] h-[500px] object-cover md:top-[120px] md:right-68 md:h-[1000px]"
+                  src="/assets/images/sejarah/ilustrasi/12.png"
                   alt="Ilustrasi Struktur Aksara"
                 />
               </div>
@@ -1122,13 +1164,13 @@ const Sejarah: React.FC = () => {
           <div className="outer">
             <div className="inner">
               <div className="bg">
-                <p className="text-foreground absolute top-20 z-50 w-full max-w-[650px] px-2 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
+                <p className="text-foreground absolute top-20 z-50 w-full max-w-[650px] px-4 text-center text-xl text-shadow-md sm:left-25 sm:text-3xl md:px-0 md:text-left">
                   {batakNarrationContent[12].text}
                 </p>
                 <img
                   id="media-tradisional-img"
-                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:left-64 md:h-[800px]"
-                  src="/assets/images/ilustration/13.png"
+                  className="relative top-[210px] h-[450px] object-cover md:top-[40px] md:left-80 md:h-[800px]"
+                  src="/assets/images/sejarah/ilustrasi/13.png"
                   alt="Ilustrasi Media Tradisional"
                 />
               </div>
@@ -1151,13 +1193,13 @@ const Sejarah: React.FC = () => {
           <div className="outer">
             <div className="inner">
               <div className="bg">
-                <p className="text-foreground absolute top-20 z-50 w-full max-w-[650px] px-2 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
+                <p className="text-foreground absolute top-20 z-50 w-full max-w-[650px] px-4 text-center text-xl text-shadow-md sm:right-20 sm:text-3xl md:px-0 md:text-right">
                   {batakNarrationContent[13].text}
                 </p>
                 <img
                   id="ayo-hidupkan-lagi-img"
-                  className="relative top-[120px] h-[700px] object-cover md:top-[120px] md:right-52 md:h-[800px]"
-                  src="/assets/images/ilustration/14.png"
+                  className="relative top-[210px] h-[520px] object-cover md:top-[120px] md:right-52 md:h-[900px]"
+                  src="/assets/images/sejarah/ilustrasi/14.png"
                   alt="Ilustrasi Ayo Hidupkan Lagi"
                 />
               </div>
@@ -1180,29 +1222,23 @@ const Sejarah: React.FC = () => {
           <div className="outer">
             <div className="inner">
               <div className="bg">
-                <div className="absolute top-20 z-50 w-full max-w-[700px] px-2 sm:left-25">
-                  <p className="text-foreground text-center text-xl text-shadow-md sm:text-3xl md:px-0 md:text-left">
+                <div className="absolute top-1/3 z-50 w-full max-w-[700px] px-4 md:top-40 md:max-w-[1100px]">
+                  <p className="text-foreground text-center text-xl font-medium text-shadow-md sm:text-3xl md:px-0 md:text-4xl md:font-semibold">
                     {batakNarrationContent[14].text}
                   </p>
-                  <div className="mt-6 flex flex-col items-center gap-4 sm:flex-row sm:justify-start">
-                    <Button asChild variant="secondary" className="text-white">
-                      <a href="/learn">
+                  <div className="mt-6 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+                    <Button>
+                      <a href="/learn" className="px-12 py-6">
                         <b>Belajar</b>
                       </a>
                     </Button>
-                    <Button asChild variant="secondary" className="text-white">
-                      <a href="/register">
+                    <Button>
+                      <a href="/register" className="px-12 py-6">
                         <b>Daftar</b>
                       </a>
                     </Button>
                   </div>
                 </div>
-                <img
-                  id="final-section-img"
-                  className="relative top-[120px] h-[700px] scale-x-[-1] object-cover md:top-[120px] md:left-84 md:h-[800px]"
-                  src="/assets/images/ilustration/15.png"
-                  alt="Ilustrasi Final"
-                />
               </div>
             </div>
           </div>

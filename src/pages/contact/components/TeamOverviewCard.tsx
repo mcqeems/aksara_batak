@@ -41,7 +41,7 @@ export function TeamOverviewCard() {
               </div>
               <div className="border-primary/30 flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border-2">
                 <img
-                  src="/assets/images/dev/github/mubaihaqi.jpeg"
+                  src="/assets/images/dev/github/mubaihaqi.jpg"
                   alt="Muhammad Umar Baihaqi"
                   className="h-full w-full object-cover"
                 />

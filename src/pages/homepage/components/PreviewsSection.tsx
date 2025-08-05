@@ -110,10 +110,10 @@ export function PreviewsSection({ features }: PreviewsSectionProps) {
               <div className="bg-primary/10 group-hover:bg-primary/20 absolute -top-32 -right-32 h-64 w-64 rounded-full blur-3xl transition-all duration-500"></div>
               <div className="bg-destructive/10 group-hover:bg-destructive/20 absolute -bottom-32 -left-32 h-48 w-48 rounded-full blur-2xl transition-all duration-500"></div>
 
-              <div className="relative z-10 grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
+              <div className="relative z-10 grid grid-cols-1 items-center gap-0 md:gap-12 lg:grid-cols-2">
                 {/* Content Side */}
                 <motion.div
-                  className={`flex flex-col justify-center p-8 lg:p-12 ${index % 2 !== 0 ? 'lg:order-2' : ''}`}
+                  className={`flex flex-col justify-center p-8 pb-0 lg:p-12 ${index % 2 !== 0 ? 'lg:order-2' : ''}`}
                   initial={{ opacity: 0, x: index % 2 !== 0 ? 50 : -50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.5 }}
@@ -203,10 +203,10 @@ export function PreviewsSection({ features }: PreviewsSectionProps) {
                         </div>
                       )}
 
-                      <div className="bg-primary/90 absolute top-4 left-4 rounded-full px-4 py-2 text-sm font-medium text-white shadow-lg backdrop-blur-sm">
+                      <div className="bg-primary/90 absolute top-4 left-4 hidden rounded-full px-4 py-2 text-sm font-medium text-white shadow-lg backdrop-blur-sm sm:block">
                         Demo Video
                       </div>
-                      <div className="bg-destructive/90 shadow-blur-sm absolute right-4 bottom-4 rounded-full px-4 py-2 text-sm font-medium text-white shadow-lg">
+                      <div className="bg-destructive/90 shadow-blur-sm absolute right-4 bottom-4 hidden rounded-full px-4 py-2 text-sm font-medium text-white shadow-lg sm:block">
                         {feature.title}
                       </div>
 

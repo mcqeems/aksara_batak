@@ -47,7 +47,7 @@ const experts: Expert[] = [
       github: '@mubaihaqi',
       linkedin: '@mubaihaqi',
     },
-    image: '/assets/images/dev/github/mubaihaqi.jpeg',
+    image: '/assets/images/dev/github/mubaihaqi.jpg',
   },
 ];
 

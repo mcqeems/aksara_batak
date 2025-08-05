@@ -63,36 +63,36 @@
 .sejarah-page .second .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/background/1.png');
+    url('/assets/images/sejarah/bg/1.png');
 }
 .sejarah-page .third .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/background/2.png');
+    url('/assets/images/sejarah/bg/2.png');
 }
 .sejarah-page .fourth .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/background/3.png');
+    url('/assets/images/sejarah/bg/3.png');
 }
 .sejarah-page .fifth .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/background/4.png');
+    url('/assets/images/sejarah/bg/4.png');
   background-position: 50% 45%;
 }
 
 .sejarah-page .sixth .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/background/5.png');
+    url('/assets/images/sejarah/bg/5.png');
   background-position: 50% 45%;
 }
 
 .sejarah-page .seventh .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/background/6.png');
+    url('/assets/images/sejarah/bg/6.png');
   background-position: 50% 45%;
 }
 
@@ -103,56 +103,56 @@
       rgba(255, 255, 255, 0.1) 0%,
       rgba(0, 0, 0, 0.596) 100%
     ),
-    url('/assets/images/background/7.png');
+    url('/assets/images/sejarah/bg/7.png');
   background-position: 50% 45%;
 }
 
 .sejarah-page .ninth .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/background/8.png');
+    url('/assets/images/sejarah/bg/8.png');
   background-position: 50% 45%;
 }
 
 .sejarah-page .tenth .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/background/9.png');
+    url('/assets/images/sejarah/bg/9.png');
   background-position: 50% 45%;
 }
 
 .sejarah-page .eleventh .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/background/10.png');
+    url('/assets/images/sejarah/bg/10.png');
   background-position: 50% 45%;
 }
 
 .sejarah-page .twelfth .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/background/11.png');
+    url('/assets/images/sejarah/bg/11.png');
   background-position: 50% 45%;
 }
 
 .sejarah-page .thirteenth .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/background/12.png');
+    url('/assets/images/sejarah/bg/12.png');
   background-position: 50% 45%;
 }
 
 .sejarah-page .fourteenth .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/background/13.png');
+    url('/assets/images/sejarah/bg/13.png');
   background-position: 50% 45%;
 }
 
 .sejarah-page .fifteenth .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/background/14.png');
+    url('/assets/images/sejarah/bg/14.png');
   background-position: 50% 45%;
 }
 
@@ -163,85 +163,79 @@
       rgba(255, 255, 255, 0.1) 0%,
       rgba(0, 0, 0, 0.596) 100%
     ),
-    url('/assets/images/background/15.png');
+    url('/assets/images/aksara/bg/13.png');
   background-position: 50% 45%;
 }
 
 .sejarah-page .arrowCta {
-  display: block;
-  height: 20px;
-  width: 20px;
-  border: 11px solid transparent;
-  transform: rotate(45deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100px;
   position: relative;
   margin: 20px auto;
 }
 
-.sejarah-page .arrowCta:after,
-.sejarah-page .arrowCta:before {
+.sejarah-page .arrow-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.sejarah-page .arrow {
+  width: 32px;
+  height: 16px;
+  position: relative;
+  opacity: 0;
+  animation: arrow-scroll 2s ease-in-out infinite;
+}
+
+.sejarah-page .arrow::before {
   content: '';
-  display: block;
-  height: inherit;
-  width: inherit;
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
 }
 
-.sejarah-page .arrowCta:after {
-  border-bottom: 3px solid var(--muted);
-  border-right: 3px solid var(--muted);
-  top: 0;
-  left: 0;
-  opacity: 1;
-  animation: bottom-arrow 1.65s infinite;
+.sejarah-page .arrow:nth-child(1) {
+  animation-delay: 0s;
 }
 
-@keyframes bottom-arrow {
+.sejarah-page .arrow:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.sejarah-page .arrow:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes arrow-scroll {
   0% {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-  45% {
     opacity: 0;
-    transform: translate(12px, 12px);
+    transform: translateY(-20px);
   }
-  46% {
-    opacity: 0;
-    transform: translate(-16px, -16px);
-  }
-  90% {
+  25% {
     opacity: 1;
-    transform: translate(-6px, -6px);
+    transform: translateY(-10px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  75% {
+    opacity: 0.7;
+    transform: translateY(10px);
   }
   100% {
-    opacity: 1;
-    transform: translate(-6px, -6px);
-  }
-}
-
-.sejarah-page .arrowCta:before {
-  top: 0;
-  left: 0;
-  border-bottom: 3px solid var(--foreground);
-  border-right: 3px solid var(--foreground);
-  animation: top-arrow 1.65s infinite;
-}
-
-@keyframes top-arrow {
-  0% {
-    transform: translate(-6px, -6px);
-  }
-  35% {
-    transform: translate(0, 0);
-  }
-  90% {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(0, 0);
+    opacity: 0;
+    transform: translateY(20px);
   }
 }
 

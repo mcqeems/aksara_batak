@@ -1,3 +1,21 @@
+.penjelasan-page {
+  overflow: hidden !important;
+  max-width: 100vw;
+  max-height: 100vh;
+  overscroll-behavior: none;
+}
+
+.scroll-animation-container {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-animation-container * {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
 .penjelasan-page section {
   height: 100%;
   width: 100%;
@@ -36,46 +54,50 @@
 .penjelasan-page .first .bg {
   background: linear-gradient(
     180deg,
-    rgba(18, 21, 30, 1) 0%,
-    rgba(18, 21, 30, 1) 60%,
-    rgba(7, 8, 12, 0.9) 90%,
-    rgba(0, 0, 0, 0.9) 100%
+    var(--background) 0%,
+    var(--background) 60%,
+    var(--card) 90%,
+    var(--muted) 100%
   );
 }
+
 .penjelasan-page .second .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/sejarah/batak-script.jpg');
+    url('/assets/images/aksara/bg/1.png');
 }
+
 .penjelasan-page .third .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/sejarah/batak-writing.jpg');
+    url('/assets/images/aksara/bg/2.png');
 }
+
 .penjelasan-page .fourth .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/sejarah/batak-culture.jpg');
+    url('/assets/images/aksara/bg/3.png');
 }
+
 .penjelasan-page .fifth .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/sejarah/batak-tradition.jpg');
-  background-position: 50% 45%;
+    url('/assets/images/aksara/bg/4.png');
+  background-position: center;
 }
 
 .penjelasan-page .sixth .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/sejarah/batak-landscape.jpg');
-  background-position: 50% 45%;
+    url('/assets/images/aksara/bg/5.png');
+  background-position: center;
 }
 
 .penjelasan-page .seventh .bg {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
-    url('/assets/images/sejarah/batak-future.jpg');
-  background-position: 50% 45%;
+    url('/assets/images/aksara/bg/6.png');
+  background-position: center;
 }
 
 .penjelasan-page .eighth .bg {
@@ -85,84 +107,137 @@
       rgba(255, 255, 255, 0.1) 0%,
       rgba(0, 0, 0, 0.596) 100%
     ),
-    url('/assets/images/sejarah/batak-culture.jpg');
-  background-position: 50% 45%;
+    url('/assets/images/aksara/bg/7.png');
+  background-position: center;
+}
+
+.penjelasan-page .ninth .bg {
+  background-image:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
+    url('/assets/images/aksara/bg/8.png');
+  background-position: center;
+}
+
+.penjelasan-page .tenth .bg {
+  background-image:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
+    url('/assets/images/aksara/bg/9.png');
+  background-position: center;
+}
+
+.penjelasan-page .eleventh .bg {
+  background-image:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
+    url('/assets/images/aksara/bg/10.png');
+  background-position: center;
+}
+
+.penjelasan-page .twelfth .bg {
+  background-image:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
+    url('/assets/images/aksara/bg/11.png');
+  background-position: center;
+}
+
+.penjelasan-page .thirteenth .bg {
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(0, 0, 0, 0.596) 100%
+    ),
+    url('/assets/images/aksara/bg/12.png');
+  background-position: center;
+}
+
+.penjelasan-page .fourteenth .bg {
+  background-image:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%),
+    url('/assets/images/aksara/bg/13.png');
+  background-position: center;
 }
 
 .penjelasan-page .arrowCta {
-  display: block;
-  height: 20px;
-  width: 20px;
-  border: 11px solid transparent;
-  transform: rotate(45deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100px;
   position: relative;
   margin: 20px auto;
 }
 
-.penjelasan-page .arrowCta:after,
-.penjelasan-page .arrowCta:before {
+.penjelasan-page .arrow-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.penjelasan-page .arrow {
+  width: 32px;
+  height: 16px;
+  position: relative;
+  opacity: 0;
+  animation: arrow-scroll 2s ease-in-out infinite;
+}
+
+.penjelasan-page .arrow::before {
   content: '';
-  display: block;
-  height: inherit;
-  width: inherit;
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
 }
 
-.penjelasan-page .arrowCta:after {
-  border-bottom: 3px solid white;
-  border-right: 3px solid white;
-  top: 0;
-  left: 0;
-  opacity: 1;
-  animation: bottom-arrow 1.65s infinite;
+.penjelasan-page .arrow:nth-child(1) {
+  animation-delay: 0s;
 }
 
-@keyframes bottom-arrow {
+.penjelasan-page .arrow:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.penjelasan-page .arrow:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes arrow-scroll {
   0% {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-  45% {
     opacity: 0;
-    transform: translate(12px, 12px);
+    transform: translateY(-20px);
   }
-  46% {
-    opacity: 0;
-    transform: translate(-16px, -16px);
-  }
-  90% {
+  25% {
     opacity: 1;
-    transform: translate(-6px, -6px);
+    transform: translateY(-10px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  75% {
+    opacity: 0.7;
+    transform: translateY(10px);
   }
   100% {
-    opacity: 1;
-    transform: translate(-6px, -6px);
+    opacity: 0;
+    transform: translateY(20px);
   }
 }
 
-.penjelasan-page .arrowCta:before {
-  top: 0;
-  left: 0;
-  border-bottom: 3px solid white;
-  border-right: 3px solid white;
-  animation: top-arrow 1.65s infinite;
+/* Prevent scrollbars on Penjelasan page */
+body.penjelasan-page-active {
+  overflow: hidden !important;
+  max-width: 100vw;
+  max-height: 100vh;
 }
 
-@keyframes top-arrow {
-  0% {
-    transform: translate(-6px, -6px);
-  }
-  35% {
-    transform: translate(0, 0);
-  }
-  90% {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
+html.penjelasan-page-active {
+  overflow: hidden !important;
+  max-width: 100vw;
+  max-height: 100vh;
 }
